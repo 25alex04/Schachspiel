@@ -12,9 +12,11 @@ public class GameController{
 
     ArrayList<Pieces> piecesP1 = new ArrayList();
     ArrayList<Pieces> piecesP2 = new ArrayList();
+    ArrayList<Feld> possibleFelder = new ArrayList();
     Schachfeld schachfeld;
     int clickedXPosition;
     int clickedYPosition;
+    Pieces p;
 
     public GameController() {
 
@@ -65,14 +67,162 @@ public class GameController{
         piecesP2.add(turm2P2);
 
         schachfeld = new Schachfeld();
+
+        for(Feld feld: schachfeld.getFelder()){
+            if (feld.getyPos()==0 || feld.getyPos()==1 || feld.getyPos()==6 || feld.getyPos()==7){
+                feld.setTaken(true);
+            }
+        }
     }
 
-    public String HAHA(){
-        return "haha";
+    public boolean isClickedFieldTaken(int x, int y){
+
+        for(Feld feld: schachfeld.getFelder()){
+            if(feld.getxPos()==x && feld.getyPos()==y){
+                return feld.isTaken();
+            }
+        }
+
+        return false;
     }
 
+    public void setFieldToTaken(int x, int y, boolean taken){
+        for (Feld feld: schachfeld.getFelder()){
+            if(feld.getxPos()==x && feld.getyPos()==y){
+                feld.setTaken(taken);
+            }
+        }
+    }
 
-    public void gameUpdate(){
+    public int getPieceOnField(int x, int y){
+
+        for(Pieces p : piecesP1){
+            if(p.getxPosition()==x && p.getyPosition()==y){
+                return p.getId();
+            }
+        }
+        for(Pieces p : piecesP2){
+            if(p.getxPosition()==x && p.getyPosition()==y){
+                return p.getId();
+            }
+        }
+        return 100;
+    }
+
+    public void destroyPiece(int id){
+
+        for(Pieces p : piecesP1){
+            if(p.getId()==id){
+                p.setAlive(false);
+                break;
+            }
+        }
+        for(Pieces p : piecesP2){
+            if(p.getId()==id){
+                p.setAlive(false);
+                break;
+            }
+        }
+    }
+
+    public Pieces getPiece(int id){
+        for(Pieces p: piecesP1){
+            if(p.getId()==id){
+                return p;
+            }
+        }
+        for(Pieces p: piecesP2){
+            if(p.getId()==id){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public Feld getFeld(int x, int y){
+        for(Feld f: schachfeld.getFelder()){
+            if (f.getxPos()==x && f.getyPos()==y){
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public void p1Turn(){
+
+        if(isClickedFieldTaken(clickedXPosition,clickedYPosition)){
+            p = getPiece(getPieceOnField(clickedXPosition,clickedYPosition));
+            switch (p.getId()){
+                case 0:
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if(!isClickedFieldTaken(clickedXPosition,clickedYPosition+1)){
+                        p.setyPosition(clickedYPosition+1);
+                        setFieldToTaken(clickedXPosition,clickedYPosition,false);
+                        setFieldToTaken(clickedXPosition,clickedYPosition+1,true);
+                        break;
+                    }
+                    if(clickedXPosition+1<8){
+                        if(isClickedFieldTaken(clickedXPosition+1,clickedYPosition+1) && getPieceOnField(clickedXPosition+1,clickedYPosition+1)>15){
+                            p.setxPosition(clickedXPosition+1);
+                            p.setyPosition(clickedYPosition+1);
+                            setFieldToTaken(clickedXPosition,clickedYPosition,false);
+                            break;
+                        }
+                    }
+                    if(clickedXPosition-1>=0){
+                        if(isClickedFieldTaken(clickedXPosition-1,clickedYPosition+1) && getPieceOnField(clickedXPosition-1,clickedYPosition+1)>15){
+                            p.setxPosition(clickedXPosition-1);
+                            p.setyPosition(clickedYPosition+1);
+                            setFieldToTaken(clickedXPosition,clickedYPosition,false);
+                            break;
+                        }
+                    }
+                    break;
+                case 8:
+                case 15:
+                    for(int y = 1; y<=7;y++){
+                        if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+y) && p.getyPosition()+y<8){
+                            possibleFelder.add(getFeld(p.getxPosition(),p.getyPosition()+y));
+                        }else{
+                            break;
+                        }
+                    }
+
+                    for (int y = 1; y<=7;y++){
+                        if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-y) && p.getyPosition()-y>=0){
+                            possibleFelder.add(getFeld(p.getxPosition(),p.getyPosition()-y));
+                        }else{
+                            break;
+                        }
+                    }
+
+                    for(int x = 1; x<=7;x++){
+                        if (!isClickedFieldTaken(p.getxPosition()+x,p.getyPosition()) && p.getxPosition()+x<8){
+                            possibleFelder.add(getFeld(p.getxPosition()+x,p.getyPosition()));
+                        }else{
+                            break;
+                        }
+
+                    }
+                    for (int x = 1;x<=7;x++){
+                        if (!isClickedFieldTaken(p.getxPosition()-x,p.getyPosition()) && p.getxPosition()-x>=0){
+                            possibleFelder.add(getFeld(p.getxPosition()-x,p.getyPosition()));
+                        }else{
+                            break;
+                        }
+                    }
+
+
+
+            }
+
+        }
 
     }
 
