@@ -108,6 +108,254 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 GC.setClickedXPosition(0);
                 GC.setClickedYPosition(1);
                 break;
+            case R.id.A3:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.A4:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.A5:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.A6:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.A7:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.A8:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.B1:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.B2:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.B3:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.b4:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.B5:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.B6:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.B7:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.B8:
+                GC.setClickedXPosition(1);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.C1:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.C2:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.C3:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.C4:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.C5:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.C6:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.C7:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.C8:
+                GC.setClickedXPosition(2);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.D1:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.D2:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.D3:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.D4:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.D5:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.D6:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.D7:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.D8:
+                GC.setClickedXPosition(3);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.E1:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.E2:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.E3:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.E4:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.E5:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.E6:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.E7:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.E8:
+                GC.setClickedXPosition(4);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.F1:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.F2:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.F3:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.F4:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.F5:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.F6:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.F7:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.F8:
+                GC.setClickedXPosition(5);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.G1:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.G2:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.G3:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.G4:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.G5:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.G6:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.G7:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.G8:
+                GC.setClickedXPosition(6);
+                GC.setClickedYPosition(7);
+                break;
+            case R.id.H1:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.H2:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(1);
+                break;
+            case R.id.H3:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(2);
+                break;
+            case R.id.H4:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(3);
+                break;
+            case R.id.H5:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(4);
+                break;
+            case R.id.H6:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(5);
+                break;
+            case R.id.H7:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(6);
+                break;
+            case R.id.H8:
+                GC.setClickedXPosition(7);
+                GC.setClickedYPosition(7);
+                break;
         }
 
     }
