@@ -35,4 +35,24 @@ public abstract class Pieces {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public int getyPosition() {
+        return yPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public int getId() {
+        return id;
+    }
 }
