@@ -24,6 +24,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     public Button bestaetigenP1;
     public Button bestaetigenP2;
+    GameController GC;
 
 
     @Override
@@ -96,7 +97,18 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v){
-        Log.i("test", "ID: "+ v.getId());
+
+        switch (v.getId()){
+
+            case R.id.A1:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(0);
+                break;
+            case R.id.A2:
+                GC.setClickedXPosition(0);
+                GC.setClickedYPosition(1);
+                break;
+        }
 
     }
 

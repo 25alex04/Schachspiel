@@ -13,7 +13,8 @@ public class GameController{
     ArrayList<Pieces> piecesP1 = new ArrayList();
     ArrayList<Pieces> piecesP2 = new ArrayList();
     Schachfeld schachfeld;
-
+    int clickedXPosition;
+    int clickedYPosition;
 
     public GameController() {
 
@@ -73,6 +74,22 @@ public class GameController{
 
     public void gameUpdate(){
 
+    }
+
+    public int getClickedXPosition() {
+        return clickedXPosition;
+    }
+
+    public void setClickedXPosition(int clickedXPosition) {
+        this.clickedXPosition = clickedXPosition;
+    }
+
+    public int getClickedYPosition() {
+        return clickedYPosition;
+    }
+
+    public void setClickedYPosition(int clickedYPosition) {
+        this.clickedYPosition = clickedYPosition;
     }
 
 
