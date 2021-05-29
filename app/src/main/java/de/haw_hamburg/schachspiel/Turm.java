@@ -1,8 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
+import android.widget.ImageView;
+
 public class Turm extends Pieces{
 
-    public Turm(String img, String color, int xPos, int yPos,int id) {
+    public Turm(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
         super.color = color;

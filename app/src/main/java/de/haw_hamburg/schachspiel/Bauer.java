@@ -1,8 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
+import android.widget.ImageView;
+
 public class Bauer extends Pieces {
 
-    public Bauer(String img, String color, int xPos, int yPos,int id) {
+    public Bauer(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
         super.color = color;

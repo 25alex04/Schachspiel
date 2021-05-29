@@ -1,8 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
+import android.widget.ImageView;
+
 public abstract class Pieces {
 
-    String img;
+    ImageView img;
     boolean alive = true;
     String color;
     int yPosition;
@@ -12,11 +14,11 @@ public abstract class Pieces {
     abstract void move();
     abstract void attack();
 
-    public String getImg() {
+    public ImageView getImg() {
         return img;
     }
 
-    public void setImg(String img) {
+    public void setImg(ImageView img) {
         this.img = img;
     }
 

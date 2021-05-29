@@ -1,8 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
+import android.widget.ImageView;
+
 public class Läufer extends Pieces{
 
-    public Läufer(String img, String color, int xPos, int yPos,int id) {
+    public Läufer(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
         super.color = color;

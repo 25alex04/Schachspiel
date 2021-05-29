@@ -1,8 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
+import android.widget.ImageView;
+
 public class Springer extends Pieces{
 
-    public Springer(String img, String color, int xPos, int yPos,int id) {
+    public Springer(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
         super.color = color;
