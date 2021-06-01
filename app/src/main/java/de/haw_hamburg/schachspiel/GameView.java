@@ -23,11 +23,19 @@ import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener{
 
+    boolean clickedPositionhasChanged = false;
+    boolean endTurn = false;
     public Button bestaetigenP1;
     public Button bestaetigenP2;
+    public Button start;
+    int clickedXPosition;
+    int clickedYPosition;
+    int turn = 0;
     ImageView feld;
     GameController GC;
 
@@ -46,6 +54,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         bestaetigenP1 = findViewById(R.id.zugBestätigenButton);
         bestaetigenP2 = findViewById(R.id.zugBestätigenButton180);
+        start = findViewById(R.id.startGame);
 
         ImageButton muteSound = findViewById(R.id.soundIngameButton);
         ImageButton helpButton = findViewById(R.id.helpButton);
@@ -56,83 +65,99 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         TextView timerP1 = findViewById(R.id.timeTextView);
         TextView timerP2 = findViewById(R.id.time180TextView);
 
-
         initializeField();
-        test();
-    }
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                piecesOnStartposition();
+                start.setVisibility(View.INVISIBLE);
 
-    public static Point getLocationOnScreen(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-        return new Point(location[0], location[1]);
+            }
+        });
+
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                whiteTurn();
+            }
+        };
+        timer.schedule(timerTask,10,10);
+
+//        showPossibles();
+//        movePiece(3,3,3);
+//        while(true){
+//            showPossibles();
+//        }
     }
 
 
     private void initializeField(){
+
         felder[0][0] = (TextView) findViewById(R.id.A1);
-        felder[0][1] = findViewById(R.id.B1);
-        felder[0][2] = findViewById(R.id.C1);
-        felder[0][3] = findViewById(R.id.D1);
-        felder[0][4] = findViewById(R.id.E1);
-        felder[0][5] = findViewById(R.id.F1);
-        felder[0][6] = findViewById(R.id.G1);
-        felder[0][7] = findViewById(R.id.H1);
-        felder[1][0] = findViewById(R.id.A2);
-        felder[1][1] = findViewById(R.id.B2);
-        felder[1][2] = findViewById(R.id.C2);
-        felder[1][3] = findViewById(R.id.D2);
-        felder[1][4] = findViewById(R.id.E2);
-        felder[1][5] = findViewById(R.id.F2);
-        felder[1][6] = findViewById(R.id.G2);
-        felder[1][7] = findViewById(R.id.H2);
-        felder[2][0] = findViewById(R.id.A3);
-        felder[2][1] = findViewById(R.id.B3);
-        felder[2][2] = findViewById(R.id.C3);
-        felder[2][3] = findViewById(R.id.D3);
-        felder[2][4] = findViewById(R.id.E3);
-        felder[2][5] = findViewById(R.id.F3);
-        felder[2][6] = findViewById(R.id.G3);
-        felder[2][7] = findViewById(R.id.H3);
-        felder[3][0] = findViewById(R.id.A4);
-        felder[3][1] = findViewById(R.id.b4);
-        felder[3][2] = findViewById(R.id.C4);
-        felder[3][3] = findViewById(R.id.D4);
-        felder[3][4] = findViewById(R.id.E4);
-        felder[3][5] = findViewById(R.id.F4);
-        felder[3][6] = findViewById(R.id.G4);
-        felder[3][7] = findViewById(R.id.H4);
-        felder[4][0] = findViewById(R.id.A5);
-        felder[4][1] = findViewById(R.id.B5);
-        felder[4][2] = findViewById(R.id.C5);
-        felder[4][3] = findViewById(R.id.D5);
-        felder[4][4] = findViewById(R.id.E5);
-        felder[4][5] = findViewById(R.id.F5);
-        felder[4][6] = findViewById(R.id.G5);
-        felder[4][7] = findViewById(R.id.H5);
-        felder[5][0] = findViewById(R.id.A6);
-        felder[5][1] = findViewById(R.id.B6);
-        felder[5][2] = findViewById(R.id.C6);
-        felder[5][3] = findViewById(R.id.D6);
-        felder[5][4] = findViewById(R.id.E6);
-        felder[5][5] = findViewById(R.id.F6);
-        felder[5][6] = findViewById(R.id.G6);
-        felder[5][7] = findViewById(R.id.H6);
-        felder[6][0] = findViewById(R.id.A7);
-        felder[6][1] = findViewById(R.id.B7);
-        felder[6][2] = findViewById(R.id.C7);
-        felder[6][3] = findViewById(R.id.D7);
-        felder[6][4] = findViewById(R.id.E7);
-        felder[6][5] = findViewById(R.id.F7);
-        felder[6][6] = findViewById(R.id.G7);
-        felder[6][7] = findViewById(R.id.H7);
-        felder[7][0] = findViewById(R.id.A8);
-        felder[7][1] = findViewById(R.id.B8);
-        felder[7][2] = findViewById(R.id.C8);
-        felder[7][3] = findViewById(R.id.D8);
-        felder[7][4] = findViewById(R.id.E8);
-        felder[7][5] = findViewById(R.id.F8);
-        felder[7][6] = findViewById(R.id.G8);
-        felder[7][7] = findViewById(R.id.H8);
+        felder[0][1] = (TextView)findViewById(R.id.B1);
+        felder[0][2] = (TextView)findViewById(R.id.C1);
+        felder[0][3] = (TextView)findViewById(R.id.D1);
+        felder[0][4] = (TextView)findViewById(R.id.E1);
+        felder[0][5] = (TextView)findViewById(R.id.F1);
+        felder[0][6] = (TextView)findViewById(R.id.G1);
+        felder[0][7] = (TextView)findViewById(R.id.H1);
+        felder[1][0] = (TextView)findViewById(R.id.A2);
+        felder[1][1] = (TextView)findViewById(R.id.B2);
+        felder[1][2] = (TextView)findViewById(R.id.C2);
+        felder[1][3] = (TextView)findViewById(R.id.D2);
+        felder[1][4] = (TextView)findViewById(R.id.E2);
+        felder[1][5] = (TextView)findViewById(R.id.F2);
+        felder[1][6] = (TextView)findViewById(R.id.G2);
+        felder[1][7] = (TextView)findViewById(R.id.H2);
+        felder[2][0] = (TextView)findViewById(R.id.A3);
+        felder[2][1] = (TextView)findViewById(R.id.B3);
+        felder[2][2] = (TextView)findViewById(R.id.C3);
+        felder[2][3] = (TextView)findViewById(R.id.D3);
+        felder[2][4] = (TextView)findViewById(R.id.E3);
+        felder[2][5] = (TextView)findViewById(R.id.F3);
+        felder[2][6] = (TextView)findViewById(R.id.G3);
+        felder[2][7] = (TextView)findViewById(R.id.H3);
+        felder[3][0] = (TextView)findViewById(R.id.A4);
+        felder[3][1] = (TextView)findViewById(R.id.b4);
+        felder[3][2] = (TextView)findViewById(R.id.C4);
+        felder[3][3] = (TextView)findViewById(R.id.D4);
+        felder[3][4] = (TextView)findViewById(R.id.E4);
+        felder[3][5] = (TextView)findViewById(R.id.F4);
+        felder[3][6] = (TextView)findViewById(R.id.G4);
+        felder[3][7] = (TextView)findViewById(R.id.H4);
+        felder[4][0] = (TextView)findViewById(R.id.A5);
+        felder[4][1] = (TextView)findViewById(R.id.B5);
+        felder[4][2] = (TextView)findViewById(R.id.C5);
+        felder[4][3] = (TextView)findViewById(R.id.D5);
+        felder[4][4] = (TextView)findViewById(R.id.E5);
+        felder[4][5] = (TextView)findViewById(R.id.F5);
+        felder[4][6] = (TextView)findViewById(R.id.G5);
+        felder[4][7] = (TextView)findViewById(R.id.H5);
+        felder[5][0] = (TextView)findViewById(R.id.A6);
+        felder[5][1] = (TextView)findViewById(R.id.B6);
+        felder[5][2] = (TextView)findViewById(R.id.C6);
+        felder[5][3] = (TextView)findViewById(R.id.D6);
+        felder[5][4] = (TextView)findViewById(R.id.E6);
+        felder[5][5] = (TextView)findViewById(R.id.F6);
+        felder[5][6] = (TextView)findViewById(R.id.G6);
+        felder[5][7] = (TextView)findViewById(R.id.H6);
+        felder[6][0] = (TextView)findViewById(R.id.A7);
+        felder[6][1] = (TextView)findViewById(R.id.B7);
+        felder[6][2] = (TextView)findViewById(R.id.C7);
+        felder[6][3] = (TextView)findViewById(R.id.D7);
+        felder[6][4] = (TextView)findViewById(R.id.E7);
+        felder[6][5] = (TextView)findViewById(R.id.F7);
+        felder[6][6] = (TextView)findViewById(R.id.G7);
+        felder[6][7] = (TextView)findViewById(R.id.H7);
+        felder[7][0] = (TextView)findViewById(R.id.A8);
+        felder[7][1] = (TextView)findViewById(R.id.B8);
+        felder[7][2] = (TextView)findViewById(R.id.C8);
+        felder[7][3] = (TextView)findViewById(R.id.D8);
+        felder[7][4] = (TextView)findViewById(R.id.E8);
+        felder[7][5] = (TextView)findViewById(R.id.F8);
+        felder[7][6] = (TextView)findViewById(R.id.G8);
+        felder[7][7] = (TextView)findViewById(R.id.H8);
 
         ImageView bl_bauer1 = findViewById(R.id.bl_bauer1);
         ImageView bl_bauer2 = findViewById(R.id.bl_bauer2);
@@ -249,302 +274,405 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     }
 
-    private void test(){
-        feld.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] location = new int[2];
-                //feld.getLocationOnScreen(location);
-//                Toast.makeText(GameView.this,"X axis is "+location[0] +"and Y axis is "+location[1],Toast.LENGTH_LONG).show();
+    private void piecesOnStartposition(){
 
-                int index = 0;
-                for(int i = 0;i<2;i++){
-                    for (int j =0;j<8;j++){
-                        w_pieces.get(index).getImg().setX(felder[i][j].getX());
-                        w_pieces.get(index).getImg().setY(felder[i][j].getY());
-                        w_pieces.get(index).getImg().bringToFront();
-                        index++;
-                    }
-                }
-                index = 0;
-
-                for(int i = 7; i>5;i--){
-                    for (int j = 0;j<8;j++){
-                        bl_pieces.get(index).getImg().setX(felder[i][j].getX());
-                        bl_pieces.get(index).getImg().setY(felder[i][j].getY());
-                        bl_pieces.get(index).getImg().bringToFront();
-                        index++;
-                    }
-                }
+        int index = 0;
+        for(int i = 0;i<2;i++){
+            for (int j =0;j<8;j++){
+                w_pieces.get(index).getImg().setX(felder[i][j].getX());
+                w_pieces.get(index).getImg().setY(felder[i][j].getY());
+                w_pieces.get(index).getImg().bringToFront();
+                index++;
             }
-        });
+        }
+        index = 0;
 
-
+        for(int i = 7; i>5;i--){
+            for (int j = 0;j<8;j++){
+                bl_pieces.get(index).getImg().setX(felder[i][j].getX());
+                bl_pieces.get(index).getImg().setY(felder[i][j].getY());
+                bl_pieces.get(index).getImg().bringToFront();
+                index++;
+            }
+        }
     }
 
+    public TextView getFeld(int x, int y){
+
+        return felder[y][x];
+    }
+
+    public Pieces getPiece(int id){
+        for(Pieces p: w_pieces){
+            if(p.getId()==id){
+                return p;
+            }
+        }
+        for(Pieces p: bl_pieces){
+            if(p.getId()==id){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public Pieces getPiece(int x, int y){
+        for(Pieces p: w_pieces){
+            if(p.getxPosition()==x && p.getyPosition()==y){
+                return p;
+            }
+        }
+        for(Pieces p: bl_pieces){
+            if(p.getxPosition()==x && p.getyPosition()==y){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private void showPossibles(){
+
+        for(int i=0; i<8;i++){
+            for(int j=0;j<8;j++){
+                if ((i%2==1&&j%2==1) || (i%2==0&&j%2==0)){
+                    felder[i][j].setBackground(getResources().getDrawable(R.drawable.schwarz));
+                }else {
+                    felder[i][j].setBackground(getResources().getDrawable(R.drawable.weiss));
+                }
+            }
+        }
+    }
+
+    private void movePiece(int id, int x, int y){
+
+        bestaetigenP1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getPiece(id).getImg().setX(getFeld(x,y).getX());
+                getPiece(id).getImg().setY(getFeld(x,y).getY());
+                getPiece(id).setxPosition(x);
+                getPiece(id).setyPosition(y);
+            }
+        });
+    }
+
+
+
+    private void whiteTurn(){
+        int tmpPiece = 0;
+        TextView tmpFeld;
+        Log.i("test","Boolean: "+clickedPositionhasChanged);
+
+        if (clickedPositionhasChanged){
+            if (turn%2==1){
+                tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
+                clickedPositionhasChanged=false;
+            }else{
+                tmpFeld = getFeld(clickedXPosition,clickedYPosition);
+                getPiece(tmpPiece).setxPosition(clickedXPosition);
+                getPiece(tmpPiece).setyPosition(clickedYPosition);
+                getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                clickedPositionhasChanged=false;
+                endTurn = true;
+            }
+        }
+    }
+
+//    private void whiteTurn(){
+//        int tmpPiece = 0;
+//        TextView tmpFeld;
+//        tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
+//        clickedPositionhasChanged=false;
+//        tmpFeld = getFeld(clickedXPosition+1,clickedYPosition+1);
+//        getPiece(tmpPiece).setxPosition(clickedXPosition);
+//        getPiece(tmpPiece).setyPosition(clickedYPosition);
+//        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+//        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+//        clickedPositionhasChanged=false;
+//        endTurn = true;
+//    }
+
+    public void test(){
+
+    }
     @Override
     public void onClick(View v){
 
         switch (v.getId()){
 
             case R.id.A1:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(0);
+                setClickedYPosition(0);
                 break;
             case R.id.A2:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(0);
+                setClickedYPosition(1);
                 break;
             case R.id.A3:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(0);
+                setClickedYPosition(2);
                 break;
             case R.id.A4:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(0);
+                setClickedYPosition(3);
                 break;
             case R.id.A5:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(0);
+                setClickedYPosition(4);
                 break;
             case R.id.A6:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(0);
+                setClickedYPosition(5);
                 break;
             case R.id.A7:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(0);
+                setClickedYPosition(6);
                 break;
             case R.id.A8:
-                GC.setClickedXPosition(0);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(0);
+                setClickedYPosition(7);
                 break;
             case R.id.B1:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(1);
+                setClickedYPosition(0);
                 break;
             case R.id.B2:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(1);
+                setClickedYPosition(1);
                 break;
             case R.id.B3:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(1);
+                setClickedYPosition(2);
                 break;
             case R.id.b4:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(1);
+                setClickedYPosition(3);
                 break;
             case R.id.B5:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(1);
+                setClickedYPosition(4);
                 break;
             case R.id.B6:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(1);
+                setClickedYPosition(5);
                 break;
             case R.id.B7:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(1);
+                setClickedYPosition(6);
                 break;
             case R.id.B8:
-                GC.setClickedXPosition(1);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(1);
+                setClickedYPosition(7);
                 break;
             case R.id.C1:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(2);
+                setClickedYPosition(0);
                 break;
             case R.id.C2:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(2);
+                setClickedYPosition(1);
                 break;
             case R.id.C3:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(2);
+                setClickedYPosition(2);
                 break;
             case R.id.C4:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(2);
+                setClickedYPosition(3);
                 break;
             case R.id.C5:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(2);
+                setClickedYPosition(4);
                 break;
             case R.id.C6:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(2);
+                setClickedYPosition(5);
                 break;
             case R.id.C7:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(2);
+                setClickedYPosition(6);
                 break;
             case R.id.C8:
-                GC.setClickedXPosition(2);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(2);
+                setClickedYPosition(7);
                 break;
             case R.id.D1:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(3);
+                setClickedYPosition(0);
                 break;
             case R.id.D2:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(3);
+                setClickedYPosition(1);
                 break;
             case R.id.D3:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(3);
+                setClickedYPosition(2);
                 break;
             case R.id.D4:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(3);
+                setClickedYPosition(3);
                 break;
             case R.id.D5:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(3);
+                setClickedYPosition(4);
                 break;
             case R.id.D6:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(3);
+                setClickedYPosition(5);
                 break;
             case R.id.D7:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(3);
+                setClickedYPosition(6);
                 break;
             case R.id.D8:
-                GC.setClickedXPosition(3);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(3);
+                setClickedYPosition(7);
                 break;
             case R.id.E1:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(4);
+                setClickedYPosition(0);
                 break;
             case R.id.E2:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(4);
+                setClickedYPosition(1);
                 break;
             case R.id.E3:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(4);
+                setClickedYPosition(2);
                 break;
             case R.id.E4:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(4);
+                setClickedYPosition(3);
                 break;
             case R.id.E5:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(4);
+                setClickedYPosition(4);
                 break;
             case R.id.E6:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(4);
+                setClickedYPosition(5);
                 break;
             case R.id.E7:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(4);
+                setClickedYPosition(6);
                 break;
             case R.id.E8:
-                GC.setClickedXPosition(4);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(4);
+                setClickedYPosition(7);
                 break;
             case R.id.F1:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(5);
+                setClickedYPosition(0);
                 break;
             case R.id.F2:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(5);
+                setClickedYPosition(1);
                 break;
             case R.id.F3:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(5);
+                setClickedYPosition(2);
                 break;
             case R.id.F4:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(5);
+                setClickedYPosition(3);
                 break;
             case R.id.F5:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(5);
+                setClickedYPosition(4);
                 break;
             case R.id.F6:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(5);
+                setClickedYPosition(5);
                 break;
             case R.id.F7:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(5);
+                setClickedYPosition(6);
                 break;
             case R.id.F8:
-                GC.setClickedXPosition(5);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(5);
+                setClickedYPosition(7);
                 break;
             case R.id.G1:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(6);
+                setClickedYPosition(0);
                 break;
             case R.id.G2:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(6);
+                setClickedYPosition(1);
                 break;
             case R.id.G3:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(6);
+                setClickedYPosition(2);
                 break;
             case R.id.G4:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(6);
+                setClickedYPosition(3);
                 break;
             case R.id.G5:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(6);
+                setClickedYPosition(4);
                 break;
             case R.id.G6:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(6);
+                setClickedYPosition(5);
                 break;
             case R.id.G7:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(6);
+                setClickedYPosition(6);
                 break;
             case R.id.G8:
-                GC.setClickedXPosition(6);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(6);
+                setClickedYPosition(7);
                 break;
             case R.id.H1:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(0);
+                setClickedXPosition(7);
+                setClickedYPosition(0);
                 break;
             case R.id.H2:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(1);
+                setClickedXPosition(7);
+                setClickedYPosition(1);
                 break;
             case R.id.H3:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(2);
+                setClickedXPosition(7);
+                setClickedYPosition(2);
                 break;
             case R.id.H4:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(3);
+                setClickedXPosition(7);
+                setClickedYPosition(3);
                 break;
             case R.id.H5:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(4);
+                setClickedXPosition(7);
+                setClickedYPosition(4);
                 break;
             case R.id.H6:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(5);
+                setClickedXPosition(7);
+                setClickedYPosition(5);
                 break;
             case R.id.H7:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(6);
+                setClickedXPosition(7);
+                setClickedYPosition(6);
                 break;
             case R.id.H8:
-                GC.setClickedXPosition(7);
-                GC.setClickedYPosition(7);
+                setClickedXPosition(7);
+                setClickedYPosition(7);
                 break;
         }
+        turn++;
+        clickedPositionhasChanged = true;
+    }
 
+    public void gameloop(){
+        whiteTurn();
+        gameloop();
+    }
+
+    public void setClickedXPosition(int clickedXPosition) {
+        this.clickedXPosition = clickedXPosition;
+    }
+
+    public void setClickedYPosition(int clickedYPosition) {
+        this.clickedYPosition = clickedYPosition;
     }
 
     //GameController GC = new GameController();

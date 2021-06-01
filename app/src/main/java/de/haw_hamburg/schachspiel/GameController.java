@@ -125,6 +125,12 @@ public class GameController{
         }
     }
 
+    public void gameloop(){
+        while(true){
+            clickedYPosition++;
+        }
+    }
+
     public Pieces getPiece(int id){
         for(Pieces p: piecesP1){
             if(p.getId()==id){
