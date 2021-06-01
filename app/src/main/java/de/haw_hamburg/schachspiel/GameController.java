@@ -248,5 +248,4 @@ public class GameController{
         this.clickedYPosition = clickedYPosition;
     }
 
-
 }
