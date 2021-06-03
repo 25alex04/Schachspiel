@@ -396,6 +396,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     public void test(){
 
     }
+
     @Override
     public void onClick(View v){
 

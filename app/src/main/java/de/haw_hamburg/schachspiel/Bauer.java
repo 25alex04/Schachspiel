@@ -42,7 +42,6 @@ public class Bauer extends Pieces {
         this.yPos = yPos;
     }
 
-    @Override
     public int getId() {
         return id;
     }

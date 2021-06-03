@@ -82,7 +82,6 @@ public class GameController{
                 return feld.isTaken();
             }
         }
-
         return false;
     }
 
@@ -146,9 +145,9 @@ public class GameController{
     }
 
     public Feld getFeld(int x, int y){
-        for(Feld f: schachfeld.getFelder()){
-            if (f.getxPos()==x && f.getyPos()==y){
-                return f;
+        for(Feld feld: schachfeld.getFelder()){
+            if (feld.getxPos()==x && feld.getyPos()==y){
+                return feld;
             }
         }
         return null;
