@@ -1,5 +1,6 @@
 package de.haw_hamburg.schachspiel;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -36,15 +37,16 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int clickedXPosition;
     int clickedYPosition;
     int turn = 0;
-    int imageViewIndex = 0;
+    int tmpPiece = 0;
     ImageView feld;
     GameController GC;
+    TextView tmpFeld;
+    ArrayList<TextView> possibles = new ArrayList();
+    ArrayList<TextView> beatables = new ArrayList();
 
     TextView[][] felder = new TextView[8][8];
     ArrayList<Pieces> bl_pieces = new ArrayList();
     ArrayList<Pieces> w_pieces = new ArrayList();
-    ArrayList<ImageView> imageViewsBl = new ArrayList<>();
-    ArrayList<ImageView> imageViewsW = new ArrayList<>();
 
 
     @Override
@@ -183,22 +185,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         ImageView bl_queen = findViewById(R.id.bl_queen);
         ImageView bl_king = findViewById(R.id.bl_king);
 
-        imageViewsBl.add(bl_bauer1);
-        imageViewsBl.add(bl_bauer2)
-        imageViewsBl.add(bl_bauer3);
-        imageViewsBl.add(bl_bauer4);
-        imageViewsBl.add(bl_bauer5);
-        imageViewsBl.add(bl_bauer6);
-        imageViewsBl.add(bl_bauer7);
-        imageViewsBl.add(bl_bauer8);
-
-        for(int i = 0; i<8;i++){
-            Bauer bauer = new Bauer("weiß");
-            bauer.initialise(imageViewsBl[imageViewIndex], 0+i, 6, 16+i);
-            bl_pieces.add(bauer);
-            imageViewIndex++;
-        }
-
         Bauer bauer1_bl = new Bauer(bl_bauer1,"schwarz", 0, 6, 16);
         Bauer bauer2_bl = new Bauer(bl_bauer2,"schwarz", 1, 6, 17);
         Bauer bauer3_bl = new Bauer(bl_bauer3,"schwarz", 2, 6, 18);
@@ -291,6 +277,11 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         w_pieces.add(bauer7_w);
         w_pieces.add(bauer8_w);
 
+        for (int i=0;i<8;i++){
+            for (int j=0; j<8;j++){
+                felder[i][j].setOnClickListener(this::onClick);
+            }
+        }
     }
 
     private void piecesOnStartposition(){
@@ -349,8 +340,59 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         return null;
     }
 
-    private void showPossibles(){
 
+    private void showPossibles(Pieces p){
+
+
+
+        possibles.clear();
+        beatables.clear();
+
+        if (p instanceof Bauer){
+
+            if (true && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
+                possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
+                //Log.i("test",""+!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1));
+            }
+            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
+                possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
+            }
+            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
+            }
+            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
+            }
+        }
+
+        for (TextView t: possibles){
+            for (int i=0;i<8;i++){
+                for (int j=0;j<8;j++){
+                    if(t==felder[i][j]){
+                        try {
+                            felder[i][j].setBackground(getResources().getDrawable(R.drawable.green));
+                        }catch (Exception e){}
+                    }
+                }
+            }
+        }
+        for (TextView t: beatables){
+            for (int i=0;i<8;i++){
+                for (int j=0;j<8;j++){
+                    if(t==felder[i][j]){
+                        try {
+                            Log.i("test", "huhuh "+!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)+" Länge:"+possibles.size());
+                            felder[i][j].setBackground(getResources().getDrawable(R.drawable.red));
+                        }catch (Exception e){
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void undoPossibles(){
         for(int i=0; i<8;i++){
             for(int j=0;j<8;j++){
                 if ((i%2==1&&j%2==1) || (i%2==0&&j%2==0)){
@@ -375,49 +417,70 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         });
     }
 
+    public boolean isClickedFieldTaken(int x, int y){
 
+        for(int i=0;i<32;i++){
+            if (getPiece(i).getxPosition()==x && getPiece(i).getyPosition()==y){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String takenBy(int x, int y){
+        return getPiece(x,y).getColor();
+    }
 
     private void whiteTurn(){
-        int tmpPiece = 0;
-        TextView tmpFeld;
-        Log.i("test","Boolean: "+clickedPositionhasChanged);
 
         if (clickedPositionhasChanged){
+            //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
             if (turn%2==1){
-                tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
-                clickedPositionhasChanged=false;
+                if (isClickedFieldTaken(clickedXPosition,clickedYPosition)){
+                    if (getPiece(clickedXPosition,clickedYPosition)!=null){
+                        tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
+                        showPossibles(getPiece(tmpPiece));
+                    }
+                    clickedPositionhasChanged=false;
+
+                }else{
+                    clickedPositionhasChanged=false;
+                    turn++;
+                }
             }else{
-                tmpFeld = getFeld(clickedXPosition,clickedYPosition);
-                getPiece(tmpPiece).setxPosition(clickedXPosition);
-                getPiece(tmpPiece).setyPosition(clickedYPosition);
-                getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                if (tmpPiece<16){
+                    tmpFeld = getFeld(clickedXPosition,clickedYPosition);
+                    if (isClickedFieldTaken(clickedXPosition,clickedYPosition) && takenBy(clickedXPosition,clickedYPosition).equalsIgnoreCase("weiss")){
+                        return;
+                    }else if (beatables.contains(getFeld(clickedXPosition,clickedYPosition))){
+                        //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
+                        getPiece(clickedXPosition,clickedYPosition).getImg().setVisibility(View.INVISIBLE);
+                        getPiece(clickedXPosition,clickedYPosition).setxPosition(10);
+                        getPiece(10,clickedYPosition).setyPosition(10);
+                        getPiece(10,10).setAlive(false);
+                        getPiece(tmpPiece).setxPosition(clickedXPosition);
+                        getPiece(tmpPiece).setyPosition(clickedYPosition);
+                        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                    }else if (possibles.contains(getFeld(clickedXPosition,clickedYPosition))){
+                        getPiece(tmpPiece).setxPosition(clickedXPosition);
+                        getPiece(tmpPiece).setyPosition(clickedYPosition);
+                        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                    }
+                }
+                undoPossibles();
                 clickedPositionhasChanged=false;
                 endTurn = true;
             }
         }
     }
 
-//    private void whiteTurn(){
-//        int tmpPiece = 0;
-//        TextView tmpFeld;
-//        tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
-//        clickedPositionhasChanged=false;
-//        tmpFeld = getFeld(clickedXPosition+1,clickedYPosition+1);
-//        getPiece(tmpPiece).setxPosition(clickedXPosition);
-//        getPiece(tmpPiece).setyPosition(clickedYPosition);
-//        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-//        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
-//        clickedPositionhasChanged=false;
-//        endTurn = true;
-//    }
-
-    public void test(){
-
-    }
 
     @Override
     public void onClick(View v){
+
+        //Log.i("test", "Click"+ clickedXPosition+" "+clickedYPosition);
 
         switch (v.getId()){
 
