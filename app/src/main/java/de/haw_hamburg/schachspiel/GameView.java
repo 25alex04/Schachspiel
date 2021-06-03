@@ -47,6 +47,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     TextView[][] felder = new TextView[8][8];
     ArrayList<Pieces> bl_pieces = new ArrayList();
     ArrayList<Pieces> w_pieces = new ArrayList();
+    ImageView[] imageViewsBl = new ImageView[8];
+    ImageView[] imageViewsW = new ImageView[8];
+
 
 
     @Override
@@ -185,14 +188,21 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         ImageView bl_queen = findViewById(R.id.bl_queen);
         ImageView bl_king = findViewById(R.id.bl_king);
 
-        Bauer bauer1_bl = new Bauer(bl_bauer1,"schwarz", 0, 6, 16);
-        Bauer bauer2_bl = new Bauer(bl_bauer2,"schwarz", 1, 6, 17);
-        Bauer bauer3_bl = new Bauer(bl_bauer3,"schwarz", 2, 6, 18);
-        Bauer bauer4_bl = new Bauer(bl_bauer4,"schwarz", 3, 6, 19);
-        Bauer bauer5_bl = new Bauer(bl_bauer5,"schwarz", 4, 6, 20);
-        Bauer bauer6_bl = new Bauer(bl_bauer6,"schwarz", 5, 6, 21);
-        Bauer bauer7_bl = new Bauer(bl_bauer7,"schwarz", 6, 6, 22);
-        Bauer bauer8_bl = new Bauer(bl_bauer8,"schwarz", 7, 6, 23);
+        imageViewsBl[0] = bl_bauer1;
+        imageViewsBl[1] = bl_bauer2;
+        imageViewsBl[2] = bl_bauer3;
+        imageViewsBl[3] = bl_bauer4;
+        imageViewsBl[4] = bl_bauer5;
+        imageViewsBl[5] = bl_bauer6;
+        imageViewsBl[6] = bl_bauer7;
+        imageViewsBl[7] = bl_bauer8;
+
+
+        for(int i = 0; i<8;i++){
+            Bauer bauer = new Bauer("schwarz");
+            bauer.initialise(imageViewsBl[i], 0+i, 6, 16+i);
+            bl_pieces.add(bauer);
+        }
 
         Turm turm1_bl = new Turm(bl_turm1,"schwarz",0,7,24);
         Springer springer1_bl = new Springer(bl_springer1,"schwarz", 1, 7, 25);
@@ -211,15 +221,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         bl_pieces.add(läufer2_bl);
         bl_pieces.add(springer2_bl);
         bl_pieces.add(turm2_bl);
-        bl_pieces.add(bauer1_bl);
-        bl_pieces.add(bauer2_bl);
-        bl_pieces.add(bauer3_bl);
-        bl_pieces.add(bauer4_bl);
-        bl_pieces.add(bauer5_bl);
-        bl_pieces.add(bauer6_bl);
-        bl_pieces.add(bauer7_bl);
-        bl_pieces.add(bauer8_bl);
-
 
         ImageView w_bauer1 = findViewById(R.id.w_bauer1);
         ImageView w_bauer2 = findViewById(R.id.w_bauer2);
@@ -242,14 +243,21 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         ImageView w_queen = findViewById(R.id.w_queen);
         ImageView w_king = findViewById(R.id.w_king);
 
-        Bauer bauer1_w = new Bauer(w_bauer1,"weiß", 0, 1, 0);
-        Bauer bauer2_w = new Bauer(w_bauer2,"weiß", 1, 1, 1);
-        Bauer bauer3_w = new Bauer(w_bauer3,"weiß", 2, 1, 2);
-        Bauer bauer4_w = new Bauer(w_bauer4,"weiß", 3, 1, 3);
-        Bauer bauer5_w = new Bauer(w_bauer5,"weiß", 4, 1, 4);
-        Bauer bauer6_w = new Bauer(w_bauer6,"weiß", 5, 1, 5);
-        Bauer bauer7_w = new Bauer(w_bauer7,"weiß", 6, 1, 6);
-        Bauer bauer8_w = new Bauer(w_bauer8,"weiß", 7, 1, 7);
+        imageViewsW[0] = w_bauer1;
+        imageViewsW[1] = w_bauer2;
+        imageViewsW[2] = w_bauer3;
+        imageViewsW[3] = w_bauer4;
+        imageViewsW[4] = w_bauer5;
+        imageViewsW[5] = w_bauer6;
+        imageViewsW[6] = w_bauer7;
+        imageViewsW[7] = w_bauer8;
+
+
+        for(int i = 0; i<8;i++){
+            Bauer bauer = new Bauer("weiß");
+            bauer.initialise(imageViewsW[i], 0+i, 0, 0+i);
+            bl_pieces.add(bauer);
+        }
 
         Turm turm1_w = new Turm(w_turm1,"weiß",0,0,8);
         Springer springer1_w = new Springer(w_springer1,"weiß", 1, 0, 9);
@@ -268,14 +276,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         w_pieces.add(läufer2_w);
         w_pieces.add(springer2_w);
         w_pieces.add(turm2_w);
-        w_pieces.add(bauer1_w);
-        w_pieces.add(bauer2_w);
-        w_pieces.add(bauer3_w);
-        w_pieces.add(bauer4_w);
-        w_pieces.add(bauer5_w);
-        w_pieces.add(bauer6_w);
-        w_pieces.add(bauer7_w);
-        w_pieces.add(bauer8_w);
 
         for (int i=0;i<8;i++){
             for (int j=0; j<8;j++){
