@@ -197,13 +197,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         imageViewsBl[6] = bl_bauer7;
         imageViewsBl[7] = bl_bauer8;
 
-
-        for(int i = 0; i<8;i++){
-            Bauer bauer = new Bauer("schwarz");
-            bauer.initialise(imageViewsBl[i], 0+i, 6, 16+i);
-            bl_pieces.add(bauer);
-        }
-
         Turm turm1_bl = new Turm(bl_turm1,"schwarz",0,7,24);
         Springer springer1_bl = new Springer(bl_springer1,"schwarz", 1, 7, 25);
         Läufer läufer1_bl = new Läufer(bl_läufer1, "schwarz", 2,7,26);
@@ -221,6 +214,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         bl_pieces.add(läufer2_bl);
         bl_pieces.add(springer2_bl);
         bl_pieces.add(turm2_bl);
+
+        for(int i = 0; i<8;i++){
+            Bauer bauer = new Bauer("schwarz");
+            bauer.initialise(imageViewsBl[i], 0+i, 6, 16+i);
+            bl_pieces.add(bauer);
+        }
 
         ImageView w_bauer1 = findViewById(R.id.w_bauer1);
         ImageView w_bauer2 = findViewById(R.id.w_bauer2);
@@ -252,13 +251,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         imageViewsW[6] = w_bauer7;
         imageViewsW[7] = w_bauer8;
 
-
-        for(int i = 0; i<8;i++){
-            Bauer bauer = new Bauer("weiß");
-            bauer.initialise(imageViewsW[i], 0+i, 0, 0+i);
-            bl_pieces.add(bauer);
-        }
-
         Turm turm1_w = new Turm(w_turm1,"weiß",0,0,8);
         Springer springer1_w = new Springer(w_springer1,"weiß", 1, 0, 9);
         Läufer läufer1_w = new Läufer(w_läufer1, "weiß", 2,0,10);
@@ -277,6 +269,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         w_pieces.add(springer2_w);
         w_pieces.add(turm2_w);
 
+        for(int i = 0; i<8;i++){
+            Bauer bauer = new Bauer("weiß");
+            bauer.initialise(imageViewsW[i], 0+i, 1, 0+i);
+            w_pieces.add(bauer);
+        }
+
         for (int i=0;i<8;i++){
             for (int j=0; j<8;j++){
                 felder[i][j].setOnClickListener(this::onClick);
@@ -286,12 +284,14 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     private void piecesOnStartposition(){
 
+
         int index = 0;
         for(int i = 0;i<2;i++){
             for (int j =0;j<8;j++){
                 w_pieces.get(index).getImg().setX(felder[i][j].getX());
                 w_pieces.get(index).getImg().setY(felder[i][j].getY());
                 w_pieces.get(index).getImg().bringToFront();
+
                 index++;
             }
         }
@@ -350,9 +350,11 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         if (p instanceof Bauer){
 
-            if (true && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
+            Log.i("test","Hier bin ich");
+
+            if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
-                //Log.i("test",""+!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1));
+                ((Bauer) p).setFirstTurn(false);
             }
             if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
@@ -420,6 +422,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     public boolean isClickedFieldTaken(int x, int y){
 
         for(int i=0;i<32;i++){
+            Log.i("test","x "+getPiece(i).getxPosition()+" y "+getPiece(i).getyPosition()+" id "+i);
             if (getPiece(i).getxPosition()==x && getPiece(i).getyPosition()==y){
                 return true;
             }
@@ -437,7 +440,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
             if (turn%2==1){
                 if (isClickedFieldTaken(clickedXPosition,clickedYPosition)){
+                    Log.i("test","haha3");
                     if (getPiece(clickedXPosition,clickedYPosition)!=null){
+                        Log.i("test","haha4");
                         tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
                         showPossibles(getPiece(tmpPiece));
                     }

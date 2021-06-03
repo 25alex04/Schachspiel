@@ -9,6 +9,15 @@ public class Bauer extends Pieces {
     int xPos;
     int yPos;
     int id;
+    boolean firstTurn = true;
+
+    public boolean isFirstTurn() {
+        return firstTurn;
+    }
+
+    public void setFirstTurn(boolean firstTurn) {
+        this.firstTurn = firstTurn;
+    }
 
     public String getColor() {
         return color;
@@ -65,9 +74,10 @@ public class Bauer extends Pieces {
     }
 
     public void initialise(ImageView img, int xPos, int yPos, int id){
+
         this.img = img;
-        this.xPos = xPos;
-        this.yPos = yPos;
+        this.xPosition = xPos;
+        this.yPosition = yPos;
         this.id = id;
     }
 
