@@ -36,12 +36,15 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int clickedXPosition;
     int clickedYPosition;
     int turn = 0;
+    int imageViewIndex = 0;
     ImageView feld;
     GameController GC;
 
     TextView[][] felder = new TextView[8][8];
     ArrayList<Pieces> bl_pieces = new ArrayList();
     ArrayList<Pieces> w_pieces = new ArrayList();
+    ArrayList<ImageView> imageViewsBl = new ArrayList<>();
+    ArrayList<ImageView> imageViewsW = new ArrayList<>();
 
 
     @Override
@@ -179,6 +182,22 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         ImageView bl_queen = findViewById(R.id.bl_queen);
         ImageView bl_king = findViewById(R.id.bl_king);
+
+        imageViewsBl.add(bl_bauer1);
+        imageViewsBl.add(bl_bauer2)
+        imageViewsBl.add(bl_bauer3);
+        imageViewsBl.add(bl_bauer4);
+        imageViewsBl.add(bl_bauer5);
+        imageViewsBl.add(bl_bauer6);
+        imageViewsBl.add(bl_bauer7);
+        imageViewsBl.add(bl_bauer8);
+
+        for(int i = 0; i<8;i++){
+            Bauer bauer = new Bauer("weiß");
+            bauer.initialise(imageViewsBl[imageViewIndex], 0+i, 6, 16+i);
+            bl_pieces.add(bauer);
+            imageViewIndex++;
+        }
 
         Bauer bauer1_bl = new Bauer(bl_bauer1,"schwarz", 0, 6, 16);
         Bauer bauer2_bl = new Bauer(bl_bauer2,"schwarz", 1, 6, 17);
