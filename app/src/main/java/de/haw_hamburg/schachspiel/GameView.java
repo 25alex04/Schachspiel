@@ -38,6 +38,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int clickedYPosition;
     int turn = 0;
     int tmpPiece = 0;
+    boolean whiteTurn = true;
     ImageView feld;
     GameController GC;
     TextView tmpFeld;
@@ -87,7 +88,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                whiteTurn();
+                whiteTurn(whiteTurn);
             }
         };
         timer.schedule(timerTask,10,10);
@@ -343,8 +344,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     private void showPossibles(Pieces p){
 
-
-
         possibles.clear();
         beatables.clear();
 
@@ -434,52 +433,133 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         return getPiece(x,y).getColor();
     }
 
-    private void whiteTurn(){
+    private void whiteTurn(boolean playerTurn)
+    {
+        if(playerTurn)
+        {
+            if (clickedPositionhasChanged)
+            {
+                //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
+                if (turn % 2 == 1)
+                {
+                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
+                    {
+                        Log.i("test", "haha3");
+                        if (getPiece(clickedXPosition, clickedYPosition) != null)
+                        {
+                            Log.i("test", "haha4");
+                            tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
+                            showPossibles(getPiece(tmpPiece));
+                        }
+                        clickedPositionhasChanged = false;
 
-        if (clickedPositionhasChanged){
-            //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
-            if (turn%2==1){
-                if (isClickedFieldTaken(clickedXPosition,clickedYPosition)){
-                    Log.i("test","haha3");
-                    if (getPiece(clickedXPosition,clickedYPosition)!=null){
-                        Log.i("test","haha4");
-                        tmpPiece = getPiece(clickedXPosition,clickedYPosition).getId();
-                        showPossibles(getPiece(tmpPiece));
                     }
-                    clickedPositionhasChanged=false;
-
-                }else{
-                    clickedPositionhasChanged=false;
-                    turn++;
-                }
-            }else{
-                if (tmpPiece<16){
-                    tmpFeld = getFeld(clickedXPosition,clickedYPosition);
-                    if (isClickedFieldTaken(clickedXPosition,clickedYPosition) && takenBy(clickedXPosition,clickedYPosition).equalsIgnoreCase("weiss")){
-                        return;
-                    }else if (beatables.contains(getFeld(clickedXPosition,clickedYPosition))){
-                        //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
-                        getPiece(clickedXPosition,clickedYPosition).getImg().setVisibility(View.INVISIBLE);
-                        getPiece(clickedXPosition,clickedYPosition).setxPosition(10);
-                        getPiece(10,clickedYPosition).setyPosition(10);
-                        getPiece(10,10).setAlive(false);
-                        getPiece(tmpPiece).setxPosition(clickedXPosition);
-                        getPiece(tmpPiece).setyPosition(clickedYPosition);
-                        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
-                    }else if (possibles.contains(getFeld(clickedXPosition,clickedYPosition))){
-                        getPiece(tmpPiece).setxPosition(clickedXPosition);
-                        getPiece(tmpPiece).setyPosition(clickedYPosition);
-                        getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                        getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                    else
+                    {
+                        clickedPositionhasChanged = false;
+                        turn++;
                     }
                 }
-                undoPossibles();
-                clickedPositionhasChanged=false;
-                endTurn = true;
+                else
+                {
+                    if (tmpPiece < 16)
+                    {
+                        tmpFeld = getFeld(clickedXPosition, clickedYPosition);
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiss"))
+                        {
+                            return;
+                        }
+                        else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        {
+                            //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
+                            getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
+                            getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
+                            getPiece(10, clickedYPosition).setyPosition(10);
+                            getPiece(10, 10).setAlive(false);
+                            getPiece(tmpPiece).setxPosition(clickedXPosition);
+                            getPiece(tmpPiece).setyPosition(clickedYPosition);
+                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                        }
+                        else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        {
+                            getPiece(tmpPiece).setxPosition(clickedXPosition);
+                            getPiece(tmpPiece).setyPosition(clickedYPosition);
+                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                        }
+                    }
+                    undoPossibles();
+                    clickedPositionhasChanged = false;
+                    endTurn = true;
+                }
             }
         }
     }
+
+    /*private void blackTurn(boolean playerTurn)
+    {
+        if(playerTurn)
+        {
+            if (clickedPositionhasChanged)
+            {
+                //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
+                if (turn % 2 == 0)
+                {
+                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
+                    {
+                        Log.i("test", "haha3");
+                        if (getPiece(clickedXPosition, clickedYPosition) != null)
+                        {
+                            Log.i("test", "haha4");
+                            tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
+                            showPossibles(getPiece(tmpPiece));
+                        }
+                        clickedPositionhasChanged = false;
+
+                    }
+                    else
+                    {
+                        clickedPositionhasChanged = false;
+                        turn++;
+                    }
+                }
+                else
+                {
+                    if (tmpPiece < 16)
+                    {
+                        tmpFeld = getFeld(clickedXPosition, clickedYPosition);
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz"))
+                        {
+                            return;
+                        }
+                        else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        {
+                            //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
+                            getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
+                            getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
+                            getPiece(10, clickedYPosition).setyPosition(10);
+                            getPiece(10, 10).setAlive(false);
+                            getPiece(tmpPiece).setxPosition(clickedXPosition);
+                            getPiece(tmpPiece).setyPosition(clickedYPosition);
+                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                        }
+                        else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        {
+                            getPiece(tmpPiece).setxPosition(clickedXPosition);
+                            getPiece(tmpPiece).setyPosition(clickedYPosition);
+                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                        }
+                    }
+                    undoPossibles();
+                    clickedPositionhasChanged = false;
+                    endTurn = true;
+                }
+            }
+        }
+    }*/
 
 
     @Override
@@ -750,9 +830,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         clickedPositionhasChanged = true;
     }
 
-    public void gameloop(){
-        whiteTurn();
-        gameloop();
+    public void gameLoop(){
+        whiteTurn(whiteTurn);
+        gameLoop();
     }
 
     public void setClickedXPosition(int clickedXPosition) {

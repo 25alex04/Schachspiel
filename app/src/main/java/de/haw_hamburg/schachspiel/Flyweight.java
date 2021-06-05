@@ -12,11 +12,6 @@ public class Flyweight {
             bauer = new Bauer(color);
             bauerByColor.put(color, bauer);
         }
-        return bauer;
+        return (Bauer)bauerByColor.get(color);
     }
-
-
-
-
-
 }

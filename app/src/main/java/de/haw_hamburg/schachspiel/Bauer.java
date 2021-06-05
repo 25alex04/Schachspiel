@@ -4,11 +4,11 @@ import android.widget.ImageView;
 
 public class Bauer extends Pieces {
 
-    String color;
+    /*String color;
     ImageView img;
     int xPos;
     int yPos;
-    int id;
+    int id;*/
     boolean firstTurn = true;
 
     public boolean isFirstTurn() {
@@ -18,7 +18,7 @@ public class Bauer extends Pieces {
     public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
     }
-
+    /*
     public String getColor() {
         return color;
     }
@@ -35,6 +35,7 @@ public class Bauer extends Pieces {
         this.img = img;
     }
 
+    /*
     public int getxPos() {
         return xPos;
     }
