@@ -353,7 +353,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
             if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
-                ((Bauer) p).setFirstTurn(false);
+                //((Bauer) p).setFirstTurn(false);
             }
             if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
@@ -480,6 +480,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
                             getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            if(getPiece(tmpPiece) instanceof Bauer)
+                            {
+                                ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
+                            }
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
@@ -487,6 +491,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
                             getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            if(getPiece(tmpPiece) instanceof Bauer)
+                            {
+                                ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
+                            }
                         }
                     }
                     undoPossibles();
