@@ -351,7 +351,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
             Log.i("test","Hier bin ich");
 
-            if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
+            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
                 //((Bauer) p).setFirstTurn(false);
             }
@@ -370,52 +370,60 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
             Log.i("test","Hier bin ich");
 
+            //vorne rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8){
                 possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8) {
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()+1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
             }
+            //vorne links
             if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8){
                 possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()-1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()+2));
             }
+            //hinten rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1){
                 possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1) {
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()+1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
             }
+            //hinten links
             if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1){
                 possibles.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
             }
+            //rechts vorne
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
                 possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8) {
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()+2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
             }
+            //rechts hinten
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1){
                 possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1) {
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()+2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
             }
+            //links vorne
             if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8){
                 possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>0 && p.getyPosition()+1<8) {
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()-2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
             }
-            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0){
+            //links hinten
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1){
                 possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0) {
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0 && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
             }
         }
