@@ -366,6 +366,60 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
+        if(p instanceof Springer){
+
+            Log.i("test","Hier bin ich");
+
+            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8){
+                possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8) {
+                beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>0 && p.getyPosition()+2<8){
+                possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+2));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>0 && p.getyPosition()+2<8) {
+                beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()+2));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>0){
+                possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>0) {
+                beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>0 && p.getyPosition()-2>0){
+                possibles.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>0 && p.getyPosition()-2>0) {
+                beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
+                possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8) {
+                beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>0){
+                possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>0) {
+                beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>0 && p.getyPosition()+1<8){
+                possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>0 && p.getyPosition()+1<8) {
+                beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
+            }
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0){
+                possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
+            }
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0) {
+                beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
+            }
+        }
+
         for (TextView t: possibles){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
