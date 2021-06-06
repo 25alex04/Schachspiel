@@ -1198,8 +1198,8 @@
 
     <Button
         android:id="@+id/startGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="429dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:backgroundTint="#3C7A89"
@@ -1207,6 +1207,7 @@
         android:textSize="44sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/schachfeld"
+        app:layout_constraintHorizontal_bias="0.547"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
