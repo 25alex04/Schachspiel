@@ -376,22 +376,22 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8) {
                 beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
             }
-            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>0 && p.getyPosition()+2<8){
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8){
                 possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>0 && p.getyPosition()+2<8) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8) {
                 beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()+2));
             }
-            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>0){
+            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1){
                 possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>0) {
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1) {
                 beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
             }
-            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>0 && p.getyPosition()-2>0){
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1){
                 possibles.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>0 && p.getyPosition()-2>0) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1) {
                 beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
             }
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
@@ -400,13 +400,13 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8) {
                 beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
             }
-            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>0){
+            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1){
                 possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>0) {
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1) {
                 beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
             }
-            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>0 && p.getyPosition()+1<8){
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8){
                 possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
             }
             else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>0 && p.getyPosition()+1<8) {
