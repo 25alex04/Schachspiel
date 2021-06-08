@@ -39,6 +39,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int turn = 0;
     int tmpPiece = 0;
     boolean whiteTurn = true;
+    boolean blackTurn = false;
     ImageView feld;
     GameController GC;
     TextView tmpFeld;
@@ -89,6 +90,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             @Override
             public void run() {
                 whiteTurn(whiteTurn);
+                blackTurn(blackTurn);
             }
         };
         timer.schedule(timerTask,10,10);
@@ -347,9 +349,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         possibles.clear();
         beatables.clear();
 
-        if (p instanceof Bauer){
+        if (p instanceof Bauer && p.getColor().equalsIgnoreCase("weiß")){
 
-            Log.i("test","Hier bin ich");
 
             if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
@@ -366,9 +367,27 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
+        if (p instanceof Bauer && p.getColor().equalsIgnoreCase("schwarz")){
+
+
+            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){//firstTurn ==true
+                possibles.add(getFeld(p.getxPosition(),p.getyPosition()-2));
+                //((Bauer) p).setFirstTurn(false);
+            }
+            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
+                possibles.add(getFeld(p.getxPosition(),p.getyPosition()-1));
+            }
+            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
+            }
+            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+            }
+        }
+
         if(p instanceof Springer){
 
-            Log.i("test","Hier bin ich");
+
 
             //vorne rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8){
@@ -398,6 +417,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
             }
+            Log.i("test",""+(isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())));
             //rechts vorne
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
                 possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
@@ -423,7 +443,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1){
                 possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>0 && p.getyPosition()-1>0 && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
             }
         }
@@ -495,6 +515,299 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
+        if(p instanceof Läufer){
+
+            //nach vorn-rechts
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach unten rechts
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach hinten links
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach vorn-links
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+
+        }
+
+        if(p instanceof Dame){
+
+
+            //nach vorn
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition(),p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach unten
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition(),p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach rechts
+            for(int i=1; i<=7; i++){
+                if (p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition())){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach links
+            for(int i=1; i<=7; i++){
+                if (p.getxPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition())){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach vorn-rechts
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach unten rechts
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach hinten links
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach vorn-links
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+        }
+
+        if (p instanceof König){
+
+            //nach vorn
+            if (p.getyPosition()+1<=7){
+                if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
+                    possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
+                }else {
+                    if (!takenBy(p.getxPosition(),p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition(),p.getyPosition()+1));
+                    }
+                }
+            }
+
+            //nach unten
+            if (p.getyPosition()-1 >=0){
+                if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
+                    possibles.add(getFeld(p.getxPosition(),p.getyPosition()-1));
+                }else {
+                    if (!takenBy(p.getxPosition(),p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition(),p.getyPosition()-1));
+                    }
+
+                }
+            }
+
+            //nach rechts
+            if (p.getxPosition()+1 <= 7){
+                if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition())){
+                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()));
+                }else {
+                    if (!takenBy(p.getxPosition()+1,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()));
+                    }
+                }
+            }
+
+            //nach links
+            if (p.getxPosition()-1 >=0){
+                if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition())){
+                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()));
+                }else {
+                    if (!takenBy(p.getxPosition()-1,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()));
+                    }
+                }
+            }
+
+            //nach vorn-rechts
+            if (p.getyPosition()+1 <= 7 && p.getxPosition()+1 <= 7){
+                if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1)){
+                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
+                }else {
+                    if (!takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
+                    }
+                }
+            }
+
+            //nach unten-rechts
+            if (p.getyPosition()-1 >=0 && p.getxPosition()+1 <= 7){
+                if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1)){
+                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
+                }else {
+                    if (!takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
+                    }
+                }
+            }
+
+            //nach unten-links
+            if (p.getyPosition()-1 >=0 && p.getxPosition()-1 >= 0){
+                if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1)){
+                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+                }else {
+                    if (!takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+                    }
+                }
+            }
+
+            //nach vorn-links
+            if (p.getyPosition()+1 <=7 && p.getxPosition()-1 >=0){
+                if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1)){
+                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
+                }else {
+                    if (!takenBy(p.getxPosition()-1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
+                    }
+                }
+            }
+        }
+
         for (TextView t: possibles){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
@@ -511,7 +824,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 for (int j=0;j<8;j++){
                     if(t==felder[i][j]){
                         try {
-                            Log.i("test", "huhuh "+!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)+" Länge:"+possibles.size());
                             felder[i][j].setBackground(getResources().getDrawable(R.drawable.red));
                         }catch (Exception e){
 
@@ -534,23 +846,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-    private void movePiece(int id, int x, int y){
-
-        bestaetigenP1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPiece(id).getImg().setX(getFeld(x,y).getX());
-                getPiece(id).getImg().setY(getFeld(x,y).getY());
-                getPiece(id).setxPosition(x);
-                getPiece(id).setyPosition(y);
-            }
-        });
-    }
-
     public boolean isClickedFieldTaken(int x, int y){
 
         for(int i=0;i<32;i++){
-            Log.i("test","x "+getPiece(i).getxPosition()+" y "+getPiece(i).getyPosition()+" id "+i);
             if (getPiece(i).getxPosition()==x && getPiece(i).getyPosition()==y){
                 return true;
             }
@@ -568,16 +866,16 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         {
             if (clickedPositionhasChanged)
             {
-                //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
                 if (turn % 2 == 1)
                 {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
                     {
-//                        Log.i("test", "haha3");
                         if (getPiece(clickedXPosition, clickedYPosition) != null)
                         {
-//                            Log.i("test", "haha4");
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
+                            if (tmpPiece>15){
+                                return;
+                            }
                             showPossibles(getPiece(tmpPiece));
                         }
                         clickedPositionhasChanged = false;
@@ -594,13 +892,13 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                     if (tmpPiece < 16)
                     {
                         tmpFeld = getFeld(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiss"))
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß"))
                         {
+                            undoPossibles();
                             return;
                         }
                         else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
-                            //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -613,6 +911,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
+                            whiteTurn = false;
+                            blackTurn = true;
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
@@ -624,32 +924,35 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
+                            whiteTurn = false;
+                            blackTurn = true;
                         }
+                    }else {
+                        return;
                     }
                     undoPossibles();
                     clickedPositionhasChanged = false;
-                    endTurn = true;
                 }
             }
         }
     }
 
-    /*private void blackTurn(boolean playerTurn)
+    private void blackTurn(boolean playerTurn)
     {
         if(playerTurn)
         {
             if (clickedPositionhasChanged)
             {
-                //Log.i("test",""+tmpPiece+ "Boolean:"+isClickedFieldTaken(clickedXPosition,clickedYPosition));
-                if (turn % 2 == 0)
+                if (turn % 2 == 1)
                 {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
                     {
-                        Log.i("test", "haha3");
                         if (getPiece(clickedXPosition, clickedYPosition) != null)
                         {
-                            Log.i("test", "haha4");
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
+                            if (tmpPiece<16){
+                                return;
+                            }
                             showPossibles(getPiece(tmpPiece));
                         }
                         clickedPositionhasChanged = false;
@@ -663,16 +966,16 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 }
                 else
                 {
-                    if (tmpPiece < 16)
+                    if (tmpPiece > 15)
                     {
                         tmpFeld = getFeld(clickedXPosition, clickedYPosition);
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz"))
                         {
+                            undoPossibles();
                             return;
                         }
                         else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
-                            //Log.i("test","x:"+getPiece(clickedXPosition,clickedYPosition).getxPosition()+" y:"+ getPiece(clickedXPosition,clickedYPosition).getyPosition());
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -681,6 +984,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
                             getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            if(getPiece(tmpPiece) instanceof Bauer)
+                            {
+                                ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
+                            }
+                            blackTurn = false;
+                            whiteTurn = true;
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
@@ -688,21 +997,38 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
                             getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            if(getPiece(tmpPiece) instanceof Bauer)
+                            {
+                                ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
+                            }
+                            blackTurn = false;
+                            whiteTurn = true;
                         }
+                    }else {
+                        return;
                     }
                     undoPossibles();
                     clickedPositionhasChanged = false;
-                    endTurn = true;
                 }
             }
         }
-    }*/
+    }
 
+    public void kingDead(){
+        for (Pieces p: w_pieces){
+            if(p instanceof König && !p.isAlive()){
+
+            }
+        }
+        for (Pieces p: bl_pieces){
+            if(p instanceof König && !p.isAlive()){
+
+            }
+        }
+    }
 
     @Override
     public void onClick(View v){
-
-        //Log.i("test", "Click"+ clickedXPosition+" "+clickedYPosition);
 
         switch (v.getId()){
 
@@ -979,45 +1305,4 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     public void setClickedYPosition(int clickedYPosition) {
         this.clickedYPosition = clickedYPosition;
     }
-
-    //GameController GC = new GameController();
-
-    //ImageButton IB1 = findViewById(R.id.imageButton);
-    //ImageButton IB2 = findViewById(R.id.imageButton2);
-    //ImageButton IB3 = findViewById(R.id.imageButton3);
-    //int d = R.drawable.schachfeld_final;
-    //IB1.setOnClickListener(new View.OnClickListener() {
-    //    @RequiresApi(api = Build.VERSION_CODES.Q)
-    //    @Override
-    //    public void onClick(View v) {
-    //        int left = IB2.getLeft();
-    //        int top = IB2.getTop();
-    //        int right = IB2.getRight();
-    //        int bottom = IB2.getBottom();
-    //        IB2.setImageDrawable(getDrawable(d));
-    //        //IB2.setLeftTopRightBottom(left,top,right,bottom);
-    //        IB2.layout(left,top,right,bottom);
-    //    }
-    //});
-    //ImageButton bauer = findViewById(R.id.imageButton5);
-    //ImageButton field = findViewById(R.id.imageButton4);
-    //bauer.setOnClickListener(new View.OnClickListener() {
-    //    @Override
-    //    public void onClick(View v) {
-    //        field.setOnClickListener(new View.OnClickListener() {
-    //            @Override
-    //            public void onClick(View v) {
-    //                int left = bauer.getLeft();
-    //                int top = bauer.getTop();
-    //                int right = bauer.getRight();
-    //                int bottom = bauer.getBottom();
-    //                bauer.setImageDrawable(getDrawable(R.drawable.ic_launcher_background));
-    //                bauer.layout(left,top,right,bottom);
-    //                field.setImageDrawable(getDrawable(R.drawable.bauer));
-    //                field.layout(left,top,right,bottom);
-    //            }
-    //        });
-    //    }
-    //});
-
 }
