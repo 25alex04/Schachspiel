@@ -428,6 +428,73 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
+        if(p instanceof Turm){
+
+            //nach vorn
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+i)){
+                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition(),p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach unten
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-i)){
+                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                    }else {
+                        if (!takenBy(p.getxPosition(),p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach rechts
+            for(int i=1; i<=7; i++){
+                if (p.getxPosition()+i <= 7){
+                    if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition())){
+                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                    }else {
+                        if (!takenBy(p.getxPosition()+i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+
+            //nach links
+            for(int i=1; i<=7; i++){
+                if (p.getxPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition())){
+                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                        }
+                        break;
+                    }
+                }else {
+                    break;
+                }
+            }
+        }
+
         for (TextView t: possibles){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
@@ -506,10 +573,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
                     {
-                        Log.i("test", "haha3");
+//                        Log.i("test", "haha3");
                         if (getPiece(clickedXPosition, clickedYPosition) != null)
                         {
-                            Log.i("test", "haha4");
+//                            Log.i("test", "haha4");
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
                             showPossibles(getPiece(tmpPiece));
                         }

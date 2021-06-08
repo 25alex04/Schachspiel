@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 
 public class Flyweight {
+
     private static final HashMap<String, Bauer> bauerByColor = new HashMap<String, Bauer>();
 
     public static Bauer getBauer (String color){
