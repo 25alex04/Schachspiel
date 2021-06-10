@@ -53,6 +53,11 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     ImageView[] imageViewsW = new ImageView[8];
 
 
+    int zugCounter = 0;
+    TextView zugCounterW = findViewById(R.id.counterTextView);
+    TextView zugCounterB = findViewById(R.id.counter180TextView);
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +96,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             public void run() {
                 whiteTurn(whiteTurn);
                 blackTurn(blackTurn);
+                kingDead();
             }
         };
         timer.schedule(timerTask,10,10);
@@ -913,6 +919,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             whiteTurn = false;
                             blackTurn = true;
+                            zugCounter++;
+                            refreshZugCounter();
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
@@ -926,6 +934,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             whiteTurn = false;
                             blackTurn = true;
+                            zugCounter++;
+                            refreshZugCounter();
                         }
                     }else {
                         return;
@@ -990,6 +1000,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             blackTurn = false;
                             whiteTurn = true;
+                            zugCounter++;
+                            refreshZugCounter();
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
@@ -1003,6 +1015,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             blackTurn = false;
                             whiteTurn = true;
+                            zugCounter++;
+                            refreshZugCounter();
                         }
                     }else {
                         return;
@@ -1017,15 +1031,28 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     public void kingDead(){
         for (Pieces p: w_pieces){
             if(p instanceof König && !p.isAlive()){
-
+                Intent intent = new Intent(GameView.this, Gameover.class);
+                startActivity(intent);
             }
         }
         for (Pieces p: bl_pieces){
             if(p instanceof König && !p.isAlive()){
-
+                Intent intent = new Intent(GameView.this, Gameover.class);
+                startActivity(intent);
             }
         }
     }
+
+    // Zug Counter
+    // ----------
+    public void refreshZugCounter() {
+        if (zugCounter%2 == 1) {
+            zugCounterW.setText("Züge: " + (zugCounter-1)/2 + 1);
+        }else{
+            zugCounterB.setText("Züge: " + (zugCounter/2));
+        }
+    }
+    
 
     @Override
     public void onClick(View v){
