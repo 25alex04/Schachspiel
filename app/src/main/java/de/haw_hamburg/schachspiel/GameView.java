@@ -1,6 +1,7 @@
 package de.haw_hamburg.schachspiel;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +40,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int clickedYPosition;
     int turn = 0;
     int tmpPiece = 0;
-    boolean whiteTurn = true;
+    boolean whiteTurn = false;
     boolean blackTurn = false;
     ImageView feld;
     GameController GC;
@@ -54,10 +56,19 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
 
     int zugCounter = 0;
-    TextView zugCounterW = findViewById(R.id.counterTextView);
-    TextView zugCounterB = findViewById(R.id.counter180TextView);
+    TextView zugCounterW;
+    TextView zugCounterB;
 
+    int whiteMiliSec = 0;
+    int whiteSec = 60;
+    int whiteMin = 14;
+    TextView timerW;
 
+    int blackMiliSec = 0;
+    int blackSec = 60;
+    int blackMin = 14;
+    String time;
+    TextView timerB;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,11 +85,15 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         ImageButton muteSound = findViewById(R.id.soundIngameButton);
         ImageButton helpButton = findViewById(R.id.helpButton);
 
-        TextView counterP1 = findViewById(R.id.counterTextView);
-        TextView counterP2 = findViewById(R.id.counter180TextView);
+        zugCounterW= findViewById(R.id.counterTextView);
+        zugCounterB = findViewById(R.id.counter180TextView);
+        zugCounterW.setText("Züge: 0");
+        zugCounterB.setText("Züge: 0");
 
-        TextView timerP1 = findViewById(R.id.timeTextView);
-        TextView timerP2 = findViewById(R.id.time180TextView);
+        timerW = findViewById(R.id.timeTextView);
+        timerW.setText("Zeit: 15:00");
+        timerB = findViewById(R.id.time180TextView);
+        timerB.setText("Zeit:15:00");
 
         initializeField();
         start.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +101,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             public void onClick(View v) {
                 piecesOnStartposition();
                 start.setVisibility(View.INVISIBLE);
-
+                whiteTurn = true;
             }
         });
 
@@ -97,15 +112,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 whiteTurn(whiteTurn);
                 blackTurn(blackTurn);
                 kingDead();
+
             }
         };
         timer.schedule(timerTask,10,10);
-
-//        showPossibles();
-//        movePiece(3,3,3);
-//        while(true){
-//            showPossibles();
-//        }
     }
 
 
@@ -870,6 +880,25 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     {
         if(playerTurn)
         {
+            whiteMiliSec+=10;
+            if (whiteMiliSec==1000){
+                whiteSec--;
+                whiteMiliSec=0;
+                if(whiteSec==0){
+                    whiteMin--;
+                    whiteSec=60;
+                }
+                if (whiteSec!=60){
+                    try{
+                        timerW.setText("Zeit: "+whiteMin+":"+whiteSec);
+                    }catch (Exception e){}
+                }else{
+                    try {
+                        timerW.setText("Zeit: "+whiteMin+":00");
+                    }catch (Exception e){}
+                }
+            }
+
             if (clickedPositionhasChanged)
             {
                 if (turn % 2 == 1)
@@ -951,6 +980,31 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     {
         if(playerTurn)
         {
+            blackMiliSec+=10;
+            if (blackMiliSec==1000){
+                blackSec--;
+                blackMiliSec=0;
+                if(blackSec==0){
+                    blackMin--;
+                    blackSec=60;
+                }
+                if (blackSec!=60){
+                    try{
+                        Log.i("test","Zeit: "+blackMin+":"+blackSec);
+
+                        time = "Zeit: "+ blackMin+":"+blackSec;
+                        timerB.setText(time);
+                        //timerB.setText("haha");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    try {
+                        timerB.setText("Zeit: "+blackMin+":00");
+                    }catch (Exception e){}
+                }
+            }
+
             if (clickedPositionhasChanged)
             {
                 if (turn % 2 == 1)
@@ -1047,7 +1101,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     // ----------
     public void refreshZugCounter() {
         if (zugCounter%2 == 1) {
-            zugCounterW.setText("Züge: " + (zugCounter-1)/2 + 1);
+            zugCounterW.setText("Züge: " + ((zugCounter-1)/2 + 1));
         }else{
             zugCounterB.setText("Züge: " + (zugCounter/2));
         }
