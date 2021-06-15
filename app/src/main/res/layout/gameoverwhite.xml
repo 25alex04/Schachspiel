@@ -8,34 +8,33 @@
     android:backgroundTint="#9FA2B2">
 
     <TextView
-        android:id="@+id/gameOverToptextView"
+        android:id="@+id/blackGameOverTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rotation="180"
-        android:text="Game Over"
+        android:text="You Win!"
         android:textColor="#FFFFFF"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/gameOverReplayButton"
+        app:layout_constraintBottom_toTopOf="@+id/whiteGameOverReplayButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/gameOverMenuButton"
+        android:id="@+id/whiteGameOverMenuButton"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#3C7A89"
         android:text="Menu"
         android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@+id/gameOverReplayButton"
-        app:layout_constraintEnd_toStartOf="@+id/gameOverReplayButton"
+        app:layout_constraintBottom_toBottomOf="@+id/whiteGameOverReplayButton"
+        app:layout_constraintEnd_toStartOf="@+id/whiteGameOverReplayButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/gameOverReplayButton" />
+        app:layout_constraintTop_toTopOf="@+id/whiteGameOverReplayButton" />
 
     <Button
-        android:id="@+id/gameOverReplayButton"
+        android:id="@+id/whiteGameOverReplayButton"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#3C7A89"
@@ -44,11 +43,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/gameOverMenuButton"
+        app:layout_constraintStart_toEndOf="@+id/whiteGameOverMenuButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/gameOverBottomtextView"
+        android:id="@+id/whiteGameOverTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Game Over"
@@ -57,7 +56,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameOverReplayButton"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintTop_toBottomOf="@+id/whiteGameOverReplayButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

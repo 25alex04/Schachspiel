@@ -32,7 +32,7 @@ import java.util.TimerTask;
 public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     boolean clickedPositionhasChanged = false;
-    boolean endTurn = false;
+    public static final String DATA_KEY = "GameView.Data";
     public Button bestaetigenP1;
     public Button bestaetigenP2;
     public Button start;
@@ -42,6 +42,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int tmpPiece = 0;
     boolean whiteTurn = false;
     boolean blackTurn = false;
+    boolean gameOver = false;
     ImageView feld;
     GameController GC;
     TextView tmpFeld;
@@ -67,7 +68,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     int blackMiliSec = 0;
     int blackSec = 60;
     int blackMin = 14;
-    String time;
     TextView timerB;
 
     @Override
@@ -80,6 +80,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         bestaetigenP1 = findViewById(R.id.zugBestätigenButton);
         bestaetigenP2 = findViewById(R.id.zugBestätigenButton180);
+
         start = findViewById(R.id.startGame);
 
         ImageButton muteSound = findViewById(R.id.soundIngameButton);
@@ -101,21 +102,30 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             public void onClick(View v) {
                 piecesOnStartposition();
                 start.setVisibility(View.INVISIBLE);
+                bestaetigenP1.setText(" !White starts! ");
+                bestaetigenP2.setText(" !White starts! ");
                 whiteTurn = true;
             }
         });
+
 
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                whiteTurn(whiteTurn);
-                blackTurn(blackTurn);
-                kingDead();
+
+                if (whiteMin<0 || blackMin<0 || gameOver){
+                    timer.cancel();
+                }
+                if (!gameOver){
+                    whiteTurn(whiteTurn);
+                    blackTurn(blackTurn);
+                    kingDead();
+                }
 
             }
         };
-        timer.schedule(timerTask,10,10);
+        timer.schedule(timerTask,10,50);
     }
 
 
@@ -880,7 +890,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     {
         if(playerTurn)
         {
-            whiteMiliSec+=10;
+            whiteMiliSec+=50;
             if (whiteMiliSec==1000){
                 whiteSec--;
                 whiteMiliSec=0;
@@ -888,13 +898,19 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                     whiteMin--;
                     whiteSec=60;
                 }
-                if (whiteSec!=60){
+                if (whiteSec!=60&&whiteSec>9){
                     try{
-                        timerW.setText("Zeit: "+whiteMin+":"+whiteSec);
+                        timerW.setText("Zeit:"+whiteMin+":"+whiteSec);
                     }catch (Exception e){}
+                }else if (whiteSec<10){
+                    try{
+                        timerW.setText("Zeit:"+ whiteMin+":0"+whiteSec);
+                    }catch (Exception e){
+//                        e.printStackTrace();
+                    }
                 }else{
                     try {
-                        timerW.setText("Zeit: "+whiteMin+":00");
+                        timerW.setText("Zeit:"+(whiteMin+1)+":00");
                     }catch (Exception e){}
                 }
             }
@@ -948,6 +964,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             whiteTurn = false;
                             blackTurn = true;
+                            bestaetigenP1.setText("Not your turn");
+                            bestaetigenP2.setText("Your turn");
                             zugCounter++;
                             refreshZugCounter();
                         }
@@ -963,6 +981,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             whiteTurn = false;
                             blackTurn = true;
+                            bestaetigenP1.setText("Not your turn");
+                            bestaetigenP2.setText("Your turn");
                             zugCounter++;
                             refreshZugCounter();
                         }
@@ -980,7 +1000,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
     {
         if(playerTurn)
         {
-            blackMiliSec+=10;
+            blackMiliSec+=50;
             if (blackMiliSec==1000){
                 blackSec--;
                 blackMiliSec=0;
@@ -988,19 +1008,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                     blackMin--;
                     blackSec=60;
                 }
-                if (blackSec!=60){
+                if (blackSec!=60&&blackSec>9){
                     try{
-                        Log.i("test","Zeit: "+blackMin+":"+blackSec);
-
-                        time = "Zeit: "+ blackMin+":"+blackSec;
-                        timerB.setText(time);
-                        //timerB.setText("haha");
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }else{
+                        timerB.setText("Zeit:"+ blackMin+":"+blackSec);
+                    }catch (Exception e){}
+                }else if (blackSec<10){
+                    try{
+                        timerB.setText("Zeit:"+ blackMin+":0"+blackSec);
+                    }catch (Exception e){}
+                }else {
                     try {
-                        timerB.setText("Zeit: "+blackMin+":00");
+                        timerB.setText("Zeit:"+(blackMin+1)+":00");
                     }catch (Exception e){}
                 }
             }
@@ -1054,6 +1072,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             blackTurn = false;
                             whiteTurn = true;
+                            bestaetigenP1.setText("Your turn");
+                            bestaetigenP2.setText("Not your turn");
                             zugCounter++;
                             refreshZugCounter();
                         }
@@ -1069,6 +1089,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             }
                             blackTurn = false;
                             whiteTurn = true;
+                            bestaetigenP1.setText("Your turn");
+                            bestaetigenP2.setText("Not your turn");
                             zugCounter++;
                             refreshZugCounter();
                         }
@@ -1086,14 +1108,34 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         for (Pieces p: w_pieces){
             if(p instanceof König && !p.isAlive()){
                 Intent intent = new Intent(GameView.this, Gameover.class);
+                intent.putExtra(DATA_KEY,"white");
                 startActivity(intent);
+                gameOver=true;
             }
         }
         for (Pieces p: bl_pieces){
             if(p instanceof König && !p.isAlive()){
                 Intent intent = new Intent(GameView.this, Gameover.class);
+                intent.putExtra(DATA_KEY,"black");
                 startActivity(intent);
+                gameOver=true;
             }
+        }
+
+        Log.i("test",""+whiteMin);
+
+        if (whiteMin<0){
+            Log.i("test","bin da");
+            Intent intent = new Intent(GameView.this, Gameover.class);
+            intent.putExtra(DATA_KEY,"white");
+            startActivity(intent);
+            gameOver=true;
+        }
+        if (blackMin<=0){
+            Intent intent = new Intent(GameView.this, Gameover.class);
+            intent.putExtra(DATA_KEY,"black");
+            startActivity(intent);
+            gameOver=true;
         }
     }
 
@@ -1372,11 +1414,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         }
         turn++;
         clickedPositionhasChanged = true;
-    }
-
-    public void gameLoop(){
-        whiteTurn(whiteTurn);
-        gameLoop();
     }
 
     public void setClickedXPosition(int clickedXPosition) {
