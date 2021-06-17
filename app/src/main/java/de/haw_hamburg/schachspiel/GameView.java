@@ -378,7 +378,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         if (p instanceof Bauer && p.getColor().equalsIgnoreCase("weiß")){
 
 
-            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){//firstTurn ==true
+            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
                 //((Bauer) p).setFirstTurn(false);
             }
@@ -396,7 +396,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         if (p instanceof Bauer && p.getColor().equalsIgnoreCase("schwarz")){
 
 
-            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){//firstTurn ==true
+            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
                 possibles.add(getFeld(p.getxPosition(),p.getyPosition()-2));
                 //((Bauer) p).setFirstTurn(false);
             }
@@ -832,6 +832,32 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                     }
                 }
             }
+
+            //Rochade
+            Log.i("test",""+ p.getxPosition()+p.getyPosition()+p.getColor());
+            if(p.getxPosition()==4 && p.getyPosition()==0 && p.getColor().equalsIgnoreCase("weiß")){
+                if (!isClickedFieldTaken(3,0) && !isClickedFieldTaken(2,0) && !isClickedFieldTaken(1,0)) {
+                    if (getPiece(0, 0) != null && getPiece(0, 0) instanceof Turm) {
+                        possibles.add(getFeld(0, 0));
+                    }
+                }else if (!isClickedFieldTaken(5,0) && !isClickedFieldTaken(6,0)){
+                    if (getPiece(7, 0) != null && getPiece(7, 0) instanceof Turm) {
+                        possibles.add(getFeld(7, 0));
+                    }
+                }
+            }
+
+            if(p.getxPosition()==4 && p.getyPosition()==7 && p.getColor().equalsIgnoreCase("schwarz")){
+                if (!isClickedFieldTaken(3,7) && !isClickedFieldTaken(2,7) && !isClickedFieldTaken(1,7)) {
+                    if (getPiece(0, 7) != null && getPiece(0, 7) instanceof Turm) {
+                        possibles.add(getFeld(0, 7));
+                    }
+                }else if (!isClickedFieldTaken(5,7) && !isClickedFieldTaken(6,7)){
+                    if (getPiece(7, 7) != null && getPiece(7, 7) instanceof Turm) {
+                        possibles.add(getFeld(7, 7));
+                    }
+                }
+            }
         }
 
         for (TextView t: possibles){
@@ -971,6 +997,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                         }
                         else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
                         {
+
+                            if (getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("weiß")){
+                                if (clickedXPosition==0){
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(tmpFeld.getX());
+                                } else {
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(tmpFeld.getX());
+                                }
+                            }
+
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
