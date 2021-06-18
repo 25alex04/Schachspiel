@@ -11,14 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Gameover extends AppCompatActivity {
 
-    public static final String DATA_KEY = "GameView.Data";
-    String data;
+    private static final String DATA_KEY = "GameView.Data";
+    private String data;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.gameoverwhite);
-
 
         Intent i = getIntent();
         if (i.hasExtra(DATA_KEY)){

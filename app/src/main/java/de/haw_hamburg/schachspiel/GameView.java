@@ -1,13 +1,6 @@
 package de.haw_hamburg.schachspiel;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,81 +8,77 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener{
 
-    boolean clickedPositionhasChanged = false;
-    public static final String DATA_KEY = "GameView.Data";
-    public Button bestaetigenP1;
-    public Button bestaetigenP2;
-    public Button start;
-    int clickedXPosition;
-    int clickedYPosition;
-    int turn = 0;
-    int tmpPiece = 0;
-    boolean whiteTurn = false;
-    boolean blackTurn = false;
-    boolean gameOver = false;
-    ImageView feld;
-    GameController GC;
-    TextView tmpFeld;
-    ArrayList<TextView> possibles = new ArrayList();
-    ArrayList<TextView> beatables = new ArrayList();
+    private boolean clickedPositionhasChanged = false;
+    private static final String DATA_KEY = "GameView.Data";
+    private Button playerTurnDisplayW;
+    private Button playerTurnDisplayB;
+    private Button start;
+    private int clickedXPosition;
+    private int clickedYPosition;
+    private int turn = 0;
+    private int tmpPiece = 0;
+    private boolean whiteTurn = false;
+    private boolean blackTurn = false;
+    private boolean gameOver = false;
+    private ImageView field;
 
-    TextView[][] felder = new TextView[8][8];
-    ArrayList<Pieces> bl_pieces = new ArrayList();
-    ArrayList<Pieces> w_pieces = new ArrayList();
-    ImageView[] imageViewsBl = new ImageView[8];
-    ImageView[] imageViewsW = new ImageView[8];
+    private TextView tmpField;
+    private ArrayList<TextView> possibles = new ArrayList();
+    private ArrayList<TextView> beatables = new ArrayList();
+
+    private TextView[][] fields = new TextView[8][8];
+    private ArrayList<Pieces> bl_pieces = new ArrayList();
+    private ArrayList<Pieces> w_pieces = new ArrayList();
+    private ImageView[] imageViewsBl = new ImageView[8];
+    private ImageView[] imageViewsW = new ImageView[8];
 
 
-    int zugCounter = 0;
-    TextView zugCounterW;
-    TextView zugCounterB;
+    private int turnCounter = 0;
+    private TextView turnCounterW;
+    private TextView turnCounterB;
 
-    int whiteMiliSec = 0;
-    int whiteSec = 60;
-    int whiteMin = 14;
-    TextView timerW;
+    private int whiteMiliSec = 0;
+    private int whiteSec = 60;
+    private int whiteMin = 14;
+    private TextView timerW;
 
-    int blackMiliSec = 0;
-    int blackSec = 60;
-    int blackMin = 14;
-    TextView timerB;
+    private int blackMiliSec = 0;
+    private int blackSec = 60;
+    private int blackMin = 14;
+    private TextView timerB;
+
+    private GameController GC;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gameview);
 
-        feld = findViewById(R.id.schachfeld);
+        field = findViewById(R.id.schachfeld);
 
 
-        bestaetigenP1 = findViewById(R.id.zugBestätigenButton);
-        bestaetigenP2 = findViewById(R.id.zugBestätigenButton180);
+        playerTurnDisplayW = findViewById(R.id.zugBestätigenButton);
+        playerTurnDisplayB = findViewById(R.id.zugBestätigenButton180);
 
         start = findViewById(R.id.startGame);
 
         ImageButton muteSound = findViewById(R.id.soundIngameButton);
         ImageButton helpButton = findViewById(R.id.helpButton);
 
-        zugCounterW= findViewById(R.id.counterTextView);
-        zugCounterB = findViewById(R.id.counter180TextView);
-        zugCounterW.setText("Züge: 0");
-        zugCounterB.setText("Züge: 0");
+        turnCounterW = findViewById(R.id.counterTextView);
+        turnCounterB = findViewById(R.id.counter180TextView);
+        turnCounterW.setText("Züge: 0");
+        turnCounterB.setText("Züge: 0");
 
         timerW = findViewById(R.id.timeTextView);
         timerW.setText("Zeit: 15:00");
@@ -102,13 +91,15 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             public void onClick(View v) {
                 piecesOnStartposition();
                 start.setVisibility(View.INVISIBLE);
-                bestaetigenP1.setText(" !White starts! ");
-                bestaetigenP2.setText(" !White starts! ");
+                playerTurnDisplayW.setText(" !White starts! ");
+                playerTurnDisplayB.setText(" !White starts! ");
                 whiteTurn = true;
             }
         });
 
-
+        GC = new GameController(fields,w_pieces,bl_pieces,possibles,beatables,whiteTurn,blackTurn,gameOver,timerW,timerB,turnCounterW,turnCounterB, turnCounter,
+                playerTurnDisplayW, playerTurnDisplayB,getResources().getDrawable(R.drawable.weiss),getResources().getDrawable(R.drawable.schwarz),
+                getResources().getDrawable(R.drawable.red),getResources().getDrawable(R.drawable.green));
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -118,6 +109,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                     timer.cancel();
                 }
                 if (!gameOver){
+//                    GC.whiteTurn(whiteTurn,whiteMiliSec,whiteSec,whiteMin,clickedPositionhasChanged,clickedXPosition,clickedYPosition,turn);
+//                    GC.blackTurn(blackTurn,blackMiliSec,blackSec,blackMin,clickedPositionhasChanged,clickedXPosition,clickedYPosition,turn);
                     whiteTurn(whiteTurn);
                     blackTurn(blackTurn);
                     kingDead();
@@ -131,70 +124,70 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     private void initializeField(){
 
-        felder[0][0] = (TextView) findViewById(R.id.A1);
-        felder[0][1] = (TextView)findViewById(R.id.B1);
-        felder[0][2] = (TextView)findViewById(R.id.C1);
-        felder[0][3] = (TextView)findViewById(R.id.D1);
-        felder[0][4] = (TextView)findViewById(R.id.E1);
-        felder[0][5] = (TextView)findViewById(R.id.F1);
-        felder[0][6] = (TextView)findViewById(R.id.G1);
-        felder[0][7] = (TextView)findViewById(R.id.H1);
-        felder[1][0] = (TextView)findViewById(R.id.A2);
-        felder[1][1] = (TextView)findViewById(R.id.B2);
-        felder[1][2] = (TextView)findViewById(R.id.C2);
-        felder[1][3] = (TextView)findViewById(R.id.D2);
-        felder[1][4] = (TextView)findViewById(R.id.E2);
-        felder[1][5] = (TextView)findViewById(R.id.F2);
-        felder[1][6] = (TextView)findViewById(R.id.G2);
-        felder[1][7] = (TextView)findViewById(R.id.H2);
-        felder[2][0] = (TextView)findViewById(R.id.A3);
-        felder[2][1] = (TextView)findViewById(R.id.B3);
-        felder[2][2] = (TextView)findViewById(R.id.C3);
-        felder[2][3] = (TextView)findViewById(R.id.D3);
-        felder[2][4] = (TextView)findViewById(R.id.E3);
-        felder[2][5] = (TextView)findViewById(R.id.F3);
-        felder[2][6] = (TextView)findViewById(R.id.G3);
-        felder[2][7] = (TextView)findViewById(R.id.H3);
-        felder[3][0] = (TextView)findViewById(R.id.A4);
-        felder[3][1] = (TextView)findViewById(R.id.b4);
-        felder[3][2] = (TextView)findViewById(R.id.C4);
-        felder[3][3] = (TextView)findViewById(R.id.D4);
-        felder[3][4] = (TextView)findViewById(R.id.E4);
-        felder[3][5] = (TextView)findViewById(R.id.F4);
-        felder[3][6] = (TextView)findViewById(R.id.G4);
-        felder[3][7] = (TextView)findViewById(R.id.H4);
-        felder[4][0] = (TextView)findViewById(R.id.A5);
-        felder[4][1] = (TextView)findViewById(R.id.B5);
-        felder[4][2] = (TextView)findViewById(R.id.C5);
-        felder[4][3] = (TextView)findViewById(R.id.D5);
-        felder[4][4] = (TextView)findViewById(R.id.E5);
-        felder[4][5] = (TextView)findViewById(R.id.F5);
-        felder[4][6] = (TextView)findViewById(R.id.G5);
-        felder[4][7] = (TextView)findViewById(R.id.H5);
-        felder[5][0] = (TextView)findViewById(R.id.A6);
-        felder[5][1] = (TextView)findViewById(R.id.B6);
-        felder[5][2] = (TextView)findViewById(R.id.C6);
-        felder[5][3] = (TextView)findViewById(R.id.D6);
-        felder[5][4] = (TextView)findViewById(R.id.E6);
-        felder[5][5] = (TextView)findViewById(R.id.F6);
-        felder[5][6] = (TextView)findViewById(R.id.G6);
-        felder[5][7] = (TextView)findViewById(R.id.H6);
-        felder[6][0] = (TextView)findViewById(R.id.A7);
-        felder[6][1] = (TextView)findViewById(R.id.B7);
-        felder[6][2] = (TextView)findViewById(R.id.C7);
-        felder[6][3] = (TextView)findViewById(R.id.D7);
-        felder[6][4] = (TextView)findViewById(R.id.E7);
-        felder[6][5] = (TextView)findViewById(R.id.F7);
-        felder[6][6] = (TextView)findViewById(R.id.G7);
-        felder[6][7] = (TextView)findViewById(R.id.H7);
-        felder[7][0] = (TextView)findViewById(R.id.A8);
-        felder[7][1] = (TextView)findViewById(R.id.B8);
-        felder[7][2] = (TextView)findViewById(R.id.C8);
-        felder[7][3] = (TextView)findViewById(R.id.D8);
-        felder[7][4] = (TextView)findViewById(R.id.E8);
-        felder[7][5] = (TextView)findViewById(R.id.F8);
-        felder[7][6] = (TextView)findViewById(R.id.G8);
-        felder[7][7] = (TextView)findViewById(R.id.H8);
+        fields[0][0] = (TextView) findViewById(R.id.A1);
+        fields[0][1] = (TextView)findViewById(R.id.B1);
+        fields[0][2] = (TextView)findViewById(R.id.C1);
+        fields[0][3] = (TextView)findViewById(R.id.D1);
+        fields[0][4] = (TextView)findViewById(R.id.E1);
+        fields[0][5] = (TextView)findViewById(R.id.F1);
+        fields[0][6] = (TextView)findViewById(R.id.G1);
+        fields[0][7] = (TextView)findViewById(R.id.H1);
+        fields[1][0] = (TextView)findViewById(R.id.A2);
+        fields[1][1] = (TextView)findViewById(R.id.B2);
+        fields[1][2] = (TextView)findViewById(R.id.C2);
+        fields[1][3] = (TextView)findViewById(R.id.D2);
+        fields[1][4] = (TextView)findViewById(R.id.E2);
+        fields[1][5] = (TextView)findViewById(R.id.F2);
+        fields[1][6] = (TextView)findViewById(R.id.G2);
+        fields[1][7] = (TextView)findViewById(R.id.H2);
+        fields[2][0] = (TextView)findViewById(R.id.A3);
+        fields[2][1] = (TextView)findViewById(R.id.B3);
+        fields[2][2] = (TextView)findViewById(R.id.C3);
+        fields[2][3] = (TextView)findViewById(R.id.D3);
+        fields[2][4] = (TextView)findViewById(R.id.E3);
+        fields[2][5] = (TextView)findViewById(R.id.F3);
+        fields[2][6] = (TextView)findViewById(R.id.G3);
+        fields[2][7] = (TextView)findViewById(R.id.H3);
+        fields[3][0] = (TextView)findViewById(R.id.A4);
+        fields[3][1] = (TextView)findViewById(R.id.b4);
+        fields[3][2] = (TextView)findViewById(R.id.C4);
+        fields[3][3] = (TextView)findViewById(R.id.D4);
+        fields[3][4] = (TextView)findViewById(R.id.E4);
+        fields[3][5] = (TextView)findViewById(R.id.F4);
+        fields[3][6] = (TextView)findViewById(R.id.G4);
+        fields[3][7] = (TextView)findViewById(R.id.H4);
+        fields[4][0] = (TextView)findViewById(R.id.A5);
+        fields[4][1] = (TextView)findViewById(R.id.B5);
+        fields[4][2] = (TextView)findViewById(R.id.C5);
+        fields[4][3] = (TextView)findViewById(R.id.D5);
+        fields[4][4] = (TextView)findViewById(R.id.E5);
+        fields[4][5] = (TextView)findViewById(R.id.F5);
+        fields[4][6] = (TextView)findViewById(R.id.G5);
+        fields[4][7] = (TextView)findViewById(R.id.H5);
+        fields[5][0] = (TextView)findViewById(R.id.A6);
+        fields[5][1] = (TextView)findViewById(R.id.B6);
+        fields[5][2] = (TextView)findViewById(R.id.C6);
+        fields[5][3] = (TextView)findViewById(R.id.D6);
+        fields[5][4] = (TextView)findViewById(R.id.E6);
+        fields[5][5] = (TextView)findViewById(R.id.F6);
+        fields[5][6] = (TextView)findViewById(R.id.G6);
+        fields[5][7] = (TextView)findViewById(R.id.H6);
+        fields[6][0] = (TextView)findViewById(R.id.A7);
+        fields[6][1] = (TextView)findViewById(R.id.B7);
+        fields[6][2] = (TextView)findViewById(R.id.C7);
+        fields[6][3] = (TextView)findViewById(R.id.D7);
+        fields[6][4] = (TextView)findViewById(R.id.E7);
+        fields[6][5] = (TextView)findViewById(R.id.F7);
+        fields[6][6] = (TextView)findViewById(R.id.G7);
+        fields[6][7] = (TextView)findViewById(R.id.H7);
+        fields[7][0] = (TextView)findViewById(R.id.A8);
+        fields[7][1] = (TextView)findViewById(R.id.B8);
+        fields[7][2] = (TextView)findViewById(R.id.C8);
+        fields[7][3] = (TextView)findViewById(R.id.D8);
+        fields[7][4] = (TextView)findViewById(R.id.E8);
+        fields[7][5] = (TextView)findViewById(R.id.F8);
+        fields[7][6] = (TextView)findViewById(R.id.G8);
+        fields[7][7] = (TextView)findViewById(R.id.H8);
 
         ImageView bl_bauer1 = findViewById(R.id.bl_bauer1);
         ImageView bl_bauer2 = findViewById(R.id.bl_bauer2);
@@ -306,19 +299,18 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         for (int i=0;i<8;i++){
             for (int j=0; j<8;j++){
-                felder[i][j].setOnClickListener(this::onClick);
+                fields[i][j].setOnClickListener(this::onClick);
             }
         }
     }
 
     private void piecesOnStartposition(){
 
-
         int index = 0;
         for(int i = 0;i<2;i++){
             for (int j =0;j<8;j++){
-                w_pieces.get(index).getImg().setX(felder[i][j].getX());
-                w_pieces.get(index).getImg().setY(felder[i][j].getY());
+                w_pieces.get(index).getImg().setX(fields[i][j].getX());
+                w_pieces.get(index).getImg().setY(fields[i][j].getY());
                 w_pieces.get(index).getImg().bringToFront();
 
                 index++;
@@ -328,17 +320,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
         for(int i = 7; i>5;i--){
             for (int j = 0;j<8;j++){
-                bl_pieces.get(index).getImg().setX(felder[i][j].getX());
-                bl_pieces.get(index).getImg().setY(felder[i][j].getY());
+                bl_pieces.get(index).getImg().setX(fields[i][j].getX());
+                bl_pieces.get(index).getImg().setY(fields[i][j].getY());
                 bl_pieces.get(index).getImg().bringToFront();
                 index++;
             }
         }
     }
 
-    public TextView getFeld(int x, int y){
+    public TextView getField(int x, int y){
 
-        return felder[y][x];
+        return fields[y][x];
     }
 
     public Pieces getPiece(int id){
@@ -375,39 +367,40 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         possibles.clear();
         beatables.clear();
 
-        if (p instanceof Bauer && p.getColor().equalsIgnoreCase("weiß")){
+        if (p instanceof Bauer){
+
+            if (p.getColor().equalsIgnoreCase("weiß")){
+                if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()+2));
+                    //((Bauer) p).setFirstTurn(false);
+                }
+                if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()+1));
+                }
+                if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                    beatables.add(getField(p.getxPosition()+1,p.getyPosition()+1));
+                }
+                if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                    beatables.add(getField(p.getxPosition()-1,p.getyPosition()+1));
+                }
+            }
+
+            if (p.getColor().equalsIgnoreCase("schwarz")){
 
 
-            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
-                possibles.add(getFeld(p.getxPosition(),p.getyPosition()+2));
-                //((Bauer) p).setFirstTurn(false);
-            }
-            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
-                possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
-            }
-            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
-                beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
-            }
-            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
-                beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
-            }
-        }
-
-        if (p instanceof Bauer && p.getColor().equalsIgnoreCase("schwarz")){
-
-
-            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
-                possibles.add(getFeld(p.getxPosition(),p.getyPosition()-2));
-                //((Bauer) p).setFirstTurn(false);
-            }
-            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
-                possibles.add(getFeld(p.getxPosition(),p.getyPosition()-1));
-            }
-            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
-                beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
-            }
-            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
-                beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+                if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()-2));
+                    //((Bauer) p).setFirstTurn(false);
+                }
+                if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()-1));
+                }
+                if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                    beatables.add(getField(p.getxPosition()+1,p.getyPosition()-1));
+                }
+                if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                    beatables.add(getField(p.getxPosition()-1,p.getyPosition()-1));
+                }
             }
         }
 
@@ -417,60 +410,59 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
             //vorne rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8){
-                possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
+                possibles.add(getField(p.getxPosition()+1, p.getyPosition()+2));
             }
             else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()+1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()+2));
+                beatables.add(getField(p.getxPosition()+1, p.getyPosition()+2));
             }
             //vorne links
             if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8){
-                possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+2));
+                possibles.add(getField(p.getxPosition()-1,p.getyPosition()+2));
             }
             else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()-1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()+2));
+                beatables.add(getField(p.getxPosition()-1, p.getyPosition()+2));
             }
             //hinten rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1){
-                possibles.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
+                possibles.add(getField(p.getxPosition()+1, p.getyPosition()-2));
             }
             else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()+1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()+1, p.getyPosition()-2));
+                beatables.add(getField(p.getxPosition()+1, p.getyPosition()-2));
             }
             //hinten links
             if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1){
-                possibles.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
+                possibles.add(getField(p.getxPosition()-1, p.getyPosition()-2));
             }
             else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()-1, p.getyPosition()-2));
+                beatables.add(getField(p.getxPosition()-1, p.getyPosition()-2));
             }
-            Log.i("test",""+(isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())));
             //rechts vorne
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
-                possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
+                possibles.add(getField(p.getxPosition()+2, p.getyPosition()+1));
             }
             else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()+2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()+1));
+                beatables.add(getField(p.getxPosition()+2, p.getyPosition()+1));
             }
             //rechts hinten
             if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1){
-                possibles.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
+                possibles.add(getField(p.getxPosition()+2, p.getyPosition()-1));
             }
             else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()+2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()+2, p.getyPosition()-1));
+                beatables.add(getField(p.getxPosition()+2, p.getyPosition()-1));
             }
             //links vorne
             if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8){
-                possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
+                possibles.add(getField(p.getxPosition()-2, p.getyPosition()+1));
             }
             else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()-2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()+1));
+                beatables.add(getField(p.getxPosition()-2, p.getyPosition()+1));
             }
             //links hinten
             if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1){
-                possibles.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
+                possibles.add(getField(p.getxPosition()-2, p.getyPosition()-1));
             }
             else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
-                beatables.add(getFeld(p.getxPosition()-2, p.getyPosition()-1));
+                beatables.add(getField(p.getxPosition()-2, p.getyPosition()-1));
             }
         }
 
@@ -480,10 +472,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition(),p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition(),p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition(),p.getyPosition()+i));
                         }
                         break;
                     }
@@ -496,10 +488,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition(),p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition(),p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition(),p.getyPosition()-i));
                         }
                         break;
                     }
@@ -512,10 +504,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition())){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()));
                         }
                         break;
                     }
@@ -528,10 +520,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition())){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()));
                         }
                         break;
                     }
@@ -547,10 +539,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()+i));
                         }
                         break;
                     }
@@ -563,10 +555,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()-i));
                         }
                         break;
                     }
@@ -579,10 +571,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()-i));
                         }
                         break;
                     }
@@ -595,10 +587,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()+i));
                         }
                         break;
                     }
@@ -617,10 +609,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition(),p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition(),p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition(),p.getyPosition()+i));
                         }
                         break;
                     }
@@ -633,10 +625,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition(),p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition(),p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition(),p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition(),p.getyPosition()-i));
                         }
                         break;
                     }
@@ -649,10 +641,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition())){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()));
                         }
                         break;
                     }
@@ -665,10 +657,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition())){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()));
                         }
                         break;
                     }
@@ -681,10 +673,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()+i));
                         }
                         break;
                     }
@@ -697,10 +689,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
                     if (!isClickedFieldTaken(p.getxPosition()+i,p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition()+i,p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition()+i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()+i,p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition()+i,p.getyPosition()-i));
                         }
                         break;
                     }
@@ -713,10 +705,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()-i)){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()-i));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()-i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()-i));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()-i));
                         }
                         break;
                     }
@@ -729,10 +721,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
                     if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()+i)){
-                        possibles.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()+i));
                     }else {
                         if (!takenBy(p.getxPosition()-i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
-                            beatables.add(getFeld(p.getxPosition()-i,p.getyPosition()+i));
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()+i));
                         }
                         break;
                     }
@@ -747,10 +739,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach vorn
             if (p.getyPosition()+1<=7){
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
-                    possibles.add(getFeld(p.getxPosition(),p.getyPosition()+1));
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()+1));
                 }else {
                     if (!takenBy(p.getxPosition(),p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition(),p.getyPosition()+1));
+                        beatables.add(getField(p.getxPosition(),p.getyPosition()+1));
                     }
                 }
             }
@@ -758,10 +750,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach unten
             if (p.getyPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
-                    possibles.add(getFeld(p.getxPosition(),p.getyPosition()-1));
+                    possibles.add(getField(p.getxPosition(),p.getyPosition()-1));
                 }else {
                     if (!takenBy(p.getxPosition(),p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition(),p.getyPosition()-1));
+                        beatables.add(getField(p.getxPosition(),p.getyPosition()-1));
                     }
 
                 }
@@ -770,10 +762,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach rechts
             if (p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition())){
-                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()));
+                    possibles.add(getField(p.getxPosition()+1,p.getyPosition()));
                 }else {
                     if (!takenBy(p.getxPosition()+1,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()));
+                        beatables.add(getField(p.getxPosition()+1,p.getyPosition()));
                     }
                 }
             }
@@ -781,10 +773,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach links
             if (p.getxPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition())){
-                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()));
+                    possibles.add(getField(p.getxPosition()-1,p.getyPosition()));
                 }else {
                     if (!takenBy(p.getxPosition()-1,p.getyPosition()).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()));
+                        beatables.add(getField(p.getxPosition()-1,p.getyPosition()));
                     }
                 }
             }
@@ -792,10 +784,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach vorn-rechts
             if (p.getyPosition()+1 <= 7 && p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1)){
-                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
+                    possibles.add(getField(p.getxPosition()+1,p.getyPosition()+1));
                 }else {
                     if (!takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()+1));
+                        beatables.add(getField(p.getxPosition()+1,p.getyPosition()+1));
                     }
                 }
             }
@@ -803,10 +795,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach unten-rechts
             if (p.getyPosition()-1 >=0 && p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1)){
-                    possibles.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
+                    possibles.add(getField(p.getxPosition()+1,p.getyPosition()-1));
                 }else {
                     if (!takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()+1,p.getyPosition()-1));
+                        beatables.add(getField(p.getxPosition()+1,p.getyPosition()-1));
                     }
                 }
             }
@@ -814,10 +806,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach unten-links
             if (p.getyPosition()-1 >=0 && p.getxPosition()-1 >= 0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1)){
-                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+                    possibles.add(getField(p.getxPosition()-1,p.getyPosition()-1));
                 }else {
                     if (!takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()-1));
+                        beatables.add(getField(p.getxPosition()-1,p.getyPosition()-1));
                     }
                 }
             }
@@ -825,24 +817,23 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             //nach vorn-links
             if (p.getyPosition()+1 <=7 && p.getxPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1)){
-                    possibles.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
+                    possibles.add(getField(p.getxPosition()-1,p.getyPosition()+1));
                 }else {
                     if (!takenBy(p.getxPosition()-1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
-                        beatables.add(getFeld(p.getxPosition()-1,p.getyPosition()+1));
+                        beatables.add(getField(p.getxPosition()-1,p.getyPosition()+1));
                     }
                 }
             }
 
             //Rochade
-            Log.i("test",""+ p.getxPosition()+p.getyPosition()+p.getColor());
             if(p.getxPosition()==4 && p.getyPosition()==0 && p.getColor().equalsIgnoreCase("weiß")){
                 if (!isClickedFieldTaken(3,0) && !isClickedFieldTaken(2,0) && !isClickedFieldTaken(1,0)) {
                     if (getPiece(0, 0) != null && getPiece(0, 0) instanceof Turm) {
-                        possibles.add(getFeld(0, 0));
+                        possibles.add(getField(0, 0));
                     }
                 }else if (!isClickedFieldTaken(5,0) && !isClickedFieldTaken(6,0)){
                     if (getPiece(7, 0) != null && getPiece(7, 0) instanceof Turm) {
-                        possibles.add(getFeld(7, 0));
+                        possibles.add(getField(7, 0));
                     }
                 }
             }
@@ -850,11 +841,11 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             if(p.getxPosition()==4 && p.getyPosition()==7 && p.getColor().equalsIgnoreCase("schwarz")){
                 if (!isClickedFieldTaken(3,7) && !isClickedFieldTaken(2,7) && !isClickedFieldTaken(1,7)) {
                     if (getPiece(0, 7) != null && getPiece(0, 7) instanceof Turm) {
-                        possibles.add(getFeld(0, 7));
+                        possibles.add(getField(0, 7));
                     }
                 }else if (!isClickedFieldTaken(5,7) && !isClickedFieldTaken(6,7)){
                     if (getPiece(7, 7) != null && getPiece(7, 7) instanceof Turm) {
-                        possibles.add(getFeld(7, 7));
+                        possibles.add(getField(7, 7));
                     }
                 }
             }
@@ -863,9 +854,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         for (TextView t: possibles){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
-                    if(t==felder[i][j]){
+                    if(t== fields[i][j]){
                         try {
-                            felder[i][j].setBackground(getResources().getDrawable(R.drawable.green));
+                            fields[i][j].setBackground(getResources().getDrawable(R.drawable.green));
                         }catch (Exception e){}
                     }
                 }
@@ -874,9 +865,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         for (TextView t: beatables){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
-                    if(t==felder[i][j]){
+                    if(t== fields[i][j]){
                         try {
-                            felder[i][j].setBackground(getResources().getDrawable(R.drawable.red));
+                            fields[i][j].setBackground(getResources().getDrawable(R.drawable.red));
                         }catch (Exception e){
 
                         }
@@ -890,9 +881,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
         for(int i=0; i<8;i++){
             for(int j=0;j<8;j++){
                 if ((i%2==1&&j%2==1) || (i%2==0&&j%2==0)){
-                    felder[i][j].setBackground(getResources().getDrawable(R.drawable.schwarz));
+                    fields[i][j].setBackground(getResources().getDrawable(R.drawable.schwarz));
                 }else {
-                    felder[i][j].setBackground(getResources().getDrawable(R.drawable.weiss));
+                    fields[i][j].setBackground(getResources().getDrawable(R.drawable.weiss));
                 }
             }
         }
@@ -931,9 +922,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 }else if (whiteSec<10){
                     try{
                         timerW.setText("Zeit:"+ whiteMin+":0"+whiteSec);
-                    }catch (Exception e){
-//                        e.printStackTrace();
-                    }
+                    }catch (Exception e){}
                 }else{
                     try {
                         timerW.setText("Zeit:"+(whiteMin+1)+":00");
@@ -968,13 +957,38 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 {
                     if (tmpPiece < 16)
                     {
-                        tmpFeld = getFeld(clickedXPosition, clickedYPosition);
+                        tmpField = getField(clickedXPosition, clickedYPosition);
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß"))
                         {
-                            undoPossibles();
-                            return;
+                            if (getPiece(tmpPiece)instanceof König&&  getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("weiß")){
+                                if (clickedXPosition==0){
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(3,0).getX());
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
+                                    getPiece(tmpPiece).getImg().setX(getField(2,0).getX());
+                                    getPiece(tmpPiece).setxPosition(2);
+                                } else {
+
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(5,0).getX());
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
+                                    getPiece(tmpPiece).getImg().setX(getField(6,0).getX());
+                                    getPiece(tmpPiece).setxPosition(6);
+                                }
+                                whiteTurn = false;
+                                blackTurn = true;
+                                playerTurnDisplayW.setText("Not your turn");
+                                playerTurnDisplayB.setText("Your turn");
+                                turnCounter++;
+                                refreshTurnCounter();
+                                undoPossibles();
+                                clickedPositionhasChanged = false;
+                                return;
+                            }else {
+                                undoPossibles();
+                                clickedPositionhasChanged = false;
+                                return;
+                            }
                         }
-                        else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition)))
                         {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
@@ -982,46 +996,35 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(10, 10).setAlive(false);
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
-                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            getPiece(tmpPiece).getImg().setX(tmpField.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpField.getY());
                             if(getPiece(tmpPiece) instanceof Bauer)
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             whiteTurn = false;
                             blackTurn = true;
-                            bestaetigenP1.setText("Not your turn");
-                            bestaetigenP2.setText("Your turn");
-                            zugCounter++;
-                            refreshZugCounter();
+                            playerTurnDisplayW.setText("Not your turn");
+                            playerTurnDisplayB.setText("Your turn");
+                            turnCounter++;
+                            refreshTurnCounter();
                         }
-                        else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition)))
                         {
-
-                            if (getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("weiß")){
-                                if (clickedXPosition==0){
-                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
-                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(tmpFeld.getX());
-                                } else {
-                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
-                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(tmpFeld.getX());
-                                }
-                            }
-
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
-                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            getPiece(tmpPiece).getImg().setX(tmpField.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpField.getY());
                             if(getPiece(tmpPiece) instanceof Bauer)
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             whiteTurn = false;
                             blackTurn = true;
-                            bestaetigenP1.setText("Not your turn");
-                            bestaetigenP2.setText("Your turn");
-                            zugCounter++;
-                            refreshZugCounter();
+                            playerTurnDisplayW.setText("Not your turn");
+                            playerTurnDisplayB.setText("Your turn");
+                            turnCounter++;
+                            refreshTurnCounter();
                         }
                     }else {
                         return;
@@ -1087,13 +1090,38 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                 {
                     if (tmpPiece > 15)
                     {
-                        tmpFeld = getFeld(clickedXPosition, clickedYPosition);
+                        tmpField = getField(clickedXPosition, clickedYPosition);
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz"))
                         {
-                            undoPossibles();
-                            return;
+                            if (getPiece(tmpPiece)instanceof König&&  getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("schwarz")){
+                                if (clickedXPosition==0){
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(3,0).getX());
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
+                                    getPiece(tmpPiece).getImg().setX(getField(2,0).getX());
+                                    getPiece(tmpPiece).setxPosition(2);
+                                } else {
+
+                                    getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(5,0).getX());
+                                    getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
+                                    getPiece(tmpPiece).getImg().setX(getField(6,0).getX());
+                                    getPiece(tmpPiece).setxPosition(6);
+                                }
+                                blackTurn = false;
+                                whiteTurn = true;
+                                playerTurnDisplayW.setText("Your turn");
+                                playerTurnDisplayB.setText("Not your turn");
+                                turnCounter++;
+                                refreshTurnCounter();
+                                undoPossibles();
+                                clickedPositionhasChanged = false;
+                                return;
+                            }else {
+                                undoPossibles();
+                                clickedPositionhasChanged = false;
+                                return;
+                            }
                         }
-                        else if (beatables.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition)))
                         {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
@@ -1101,35 +1129,35 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
                             getPiece(10, 10).setAlive(false);
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
-                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            getPiece(tmpPiece).getImg().setX(tmpField.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpField.getY());
                             if(getPiece(tmpPiece) instanceof Bauer)
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             blackTurn = false;
                             whiteTurn = true;
-                            bestaetigenP1.setText("Your turn");
-                            bestaetigenP2.setText("Not your turn");
-                            zugCounter++;
-                            refreshZugCounter();
+                            playerTurnDisplayW.setText("Your turn");
+                            playerTurnDisplayB.setText("Not your turn");
+                            turnCounter++;
+                            refreshTurnCounter();
                         }
-                        else if (possibles.contains(getFeld(clickedXPosition, clickedYPosition)))
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition)))
                         {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
-                            getPiece(tmpPiece).getImg().setX(tmpFeld.getX());
-                            getPiece(tmpPiece).getImg().setY(tmpFeld.getY());
+                            getPiece(tmpPiece).getImg().setX(tmpField.getX());
+                            getPiece(tmpPiece).getImg().setY(tmpField.getY());
                             if(getPiece(tmpPiece) instanceof Bauer)
                             {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             blackTurn = false;
                             whiteTurn = true;
-                            bestaetigenP1.setText("Your turn");
-                            bestaetigenP2.setText("Not your turn");
-                            zugCounter++;
-                            refreshZugCounter();
+                            playerTurnDisplayW.setText("Your turn");
+                            playerTurnDisplayB.setText("Not your turn");
+                            turnCounter++;
+                            refreshTurnCounter();
                         }
                     }else {
                         return;
@@ -1159,10 +1187,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
             }
         }
 
-        Log.i("test",""+whiteMin);
 
         if (whiteMin<0){
-            Log.i("test","bin da");
+
             Intent intent = new Intent(GameView.this, Gameover.class);
             intent.putExtra(DATA_KEY,"white");
             startActivity(intent);
@@ -1178,11 +1205,11 @@ public class GameView extends AppCompatActivity implements View.OnClickListener{
 
     // Zug Counter
     // ----------
-    public void refreshZugCounter() {
-        if (zugCounter%2 == 1) {
-            zugCounterW.setText("Züge: " + ((zugCounter-1)/2 + 1));
+    public void refreshTurnCounter() {
+        if (turnCounter %2 == 1) {
+            turnCounterW.setText("Züge: " + ((turnCounter -1)/2 + 1));
         }else{
-            zugCounterB.setText("Züge: " + (zugCounter/2));
+            turnCounterB.setText("Züge: " + (turnCounter /2));
         }
     }
     

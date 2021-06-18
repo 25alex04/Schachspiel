@@ -1,6 +1,10 @@
 package de.haw_hamburg.schachspiel;
 
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.function.Function;
 
 public class Bauer extends Pieces {
 
@@ -84,7 +88,39 @@ public class Bauer extends Pieces {
 
     @Override
     void move() {
-
+//        if (p.getColor().equalsIgnoreCase("weiß")){
+//            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
+//                possibles.add(field[p.getxPosition()][p.getyPosition()+2]);
+//                //((Bauer) p).setFirstTurn(false);
+//            }
+//            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
+//                possibles.add(field[p.getxPosition()][p.getyPosition()+1]);
+//            }
+//            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenByW){
+//                beatables.add(field[p.getxPosition()+1][p.getyPosition()+1]);
+//            }
+//            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenByW){
+//                beatables.add(field[p.getxPosition()-1][p.getyPosition()+1]);
+//            }
+//        }
+//
+//        if (p.getColor().equalsIgnoreCase("schwarz")){
+//
+//
+//            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
+//                possibles.add(field[p.getxPosition()][p.getyPosition()-2]);
+//                //((Bauer) p).setFirstTurn(false);
+//            }
+//            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
+//                possibles.add(field[p.getxPosition()][p.getyPosition()-1]);
+//            }
+//            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenByBl){
+//                beatables.add(field[p.getxPosition()+1][p.getyPosition()-1]);
+//            }
+//            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenByBl){
+//                beatables.add(field[p.getxPosition()-1][p.getyPosition()-1]);
+//            }
+//        }
     }
 
     @Override
