@@ -889,8 +889,12 @@ public class GameController{
                 else{
                     if (tmpPiece > 15) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz")) {
-                            if (getPiece(tmpPiece)instanceof König&&  getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("schwarz")){
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
+                                && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz")) {
+                            if (getPiece(tmpPiece)instanceof König
+                                    && getPiece(clickedXPosition,clickedYPosition)!=null
+                                    && getPiece(clickedXPosition,clickedYPosition)instanceof Turm
+                                    && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("schwarz")){
                                 if (clickedXPosition==0){
                                     getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(3,0).getX());
                                     getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
