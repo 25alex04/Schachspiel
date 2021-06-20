@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 public class König extends Pieces{
 
+    //constructor for king
     public König(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
@@ -12,11 +13,14 @@ public class König extends Pieces{
         super.yPosition = yPos;
         super.id = id;
     }
+
+    //planned move()-method
     @Override
     void move() {
 
     }
 
+    //planned attack()-method
     @Override
     void attack() {
 

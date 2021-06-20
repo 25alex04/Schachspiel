@@ -203,8 +203,6 @@ public class GameController{
 
         if(p instanceof Springer){
 
-
-
             //vorne rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2)
                     && p.getxPosition()+1<8

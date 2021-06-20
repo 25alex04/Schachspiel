@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 public class Springer extends Pieces{
 
+    //constructor for knight
     public Springer(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
@@ -13,11 +14,13 @@ public class Springer extends Pieces{
         super.id = id;
     }
 
+    //planned move()-method
     @Override
     void move() {
 
     }
 
+    //planned attack()-method
     @Override
     void attack() {
 

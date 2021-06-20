@@ -6,78 +6,27 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.function.Function;
 
+//Pawn class
 public class Bauer extends Pieces {
 
-    /*String color;
-    ImageView img;
-    int xPos;
-    int yPos;
-    int id;*/
-    boolean firstTurn = true;
+    boolean firstTurn = true; //boolean whether it is the player's first turn
 
+    //method to check firstTurn
     public boolean isFirstTurn() {
         return firstTurn;
     }
 
+    //set firstTurn
     public void setFirstTurn(boolean firstTurn) {
         this.firstTurn = firstTurn;
     }
-    /*
-    public String getColor() {
-        return color;
-    }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public ImageView getImg() {
-        return img;
-    }
-
-    public void setImg(ImageView img) {
-        this.img = img;
-    }
-
-    /*
-    public int getxPos() {
-        return xPos;
-    }
-
-    public void setxPos(int xPos) {
-        this.xPos = xPos;
-    }
-
-    public int getyPos() {
-        return yPos;
-    }
-
-    public void setyPos(int yPos) {
-        this.yPos = yPos;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /*public Bauer(ImageView img, String color, int xPos, int yPos, int id) {
-        //super();
-        super.img = img;
-        super.color = color;
-        super.xPosition = xPos;
-        super.yPosition = yPos;
-        super.id = id;
-        }
-     */
-
+    //constructor for pawn
     public Bauer(String color){
         super.color = color;
     }
 
+    //initialise the object with attributes
     public void initialise(ImageView img, int xPos, int yPos, int id){
 
         this.img = img;
@@ -86,6 +35,7 @@ public class Bauer extends Pieces {
         this.id = id;
     }
 
+    //first tries to create move()-method
     @Override
     void move() {
 //        if (p.getColor().equalsIgnoreCase("weiß")){
@@ -123,6 +73,7 @@ public class Bauer extends Pieces {
 //        }
     }
 
+    //planned attack()-method
     @Override
     void attack() {
 

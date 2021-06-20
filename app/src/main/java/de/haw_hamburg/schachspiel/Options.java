@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Options extends AppCompatActivity {
 
+    //planned use for options menu
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

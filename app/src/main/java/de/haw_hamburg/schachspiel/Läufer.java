@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 public class Läufer extends Pieces{
 
+    //constructor for bishop
     public Läufer(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
@@ -13,11 +14,13 @@ public class Läufer extends Pieces{
         super.id = id;
     }
 
+    //planned move()-method
     @Override
     void move() {
 
     }
 
+    //planned attack()-method
     @Override
     void attack() {
 
