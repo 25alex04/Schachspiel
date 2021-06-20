@@ -17,45 +17,46 @@ import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener {
 
-    private boolean clickedPositionHasChanged = false;
-    private static final String DATA_KEY = "GameView.Data";
-    private Button playerTurnDisplayW;
-    private Button playerTurnDisplayB;
-    private Button start;
-    private int clickedXPosition;
-    private int clickedYPosition;
-    private int turn = 0;
-    private int tmpPiece = 0;
-    private boolean whiteTurn = false;
-    private boolean blackTurn = false;
-    private boolean gameOver = false;
-    private ImageView field;
 
-    private TextView tmpField;
-    private ArrayList<TextView> possibles = new ArrayList();
-    private ArrayList<TextView> beatables = new ArrayList();
+    private boolean clickedPositionHasChanged = false;              // boolean: true if a player clicked on a chess square to move a piece
+    private static final String DATA_KEY = "GameView.Data";         // key to  access information in different intents
+    private Button playerTurnDisplayW;                              // Button that shows the active players turn
+    private Button playerTurnDisplayB;                              // Button that shows the active players turn
+    private Button start;                                           // Button to start the chess game
+    private int clickedXPosition;                                   // Holds X coordinate of clicked position
+    private int clickedYPosition;                                   // Holds Y coordinate of clicked position
+    private int clickedCounter = 0;                                 // Counts the amount of clicks
+    private int tmpPiece = 0;                                       // Remembers clicked piece until piece move is confirmed
+    private boolean whiteTurn = false;                              // boolean: true if it's the white players turn
+    private boolean blackTurn = false;                              // boolean: true if it's the black players turn
+    private boolean gameOver = false;                               // boolean: true if one of the player lost the game by time or by checkmate
+    private ImageView field;                                        // Create imageview for the chess board
 
-    private TextView[][] fields = new TextView[8][8];
-    private ArrayList<Pieces> bl_pieces = new ArrayList();
-    private ArrayList<Pieces> w_pieces = new ArrayList();
-    private ImageView[] imageViewsBl = new ImageView[8];
-    private ImageView[] imageViewsW = new ImageView[8];
+    private TextView tmpField;                                      // Temporary version of game state
+    private ArrayList<TextView> possibles = new ArrayList();        // ArrayList of possible moves
+    private ArrayList<TextView> beatables = new ArrayList();        // ArrayList of beatable pieces
 
-    private int turnCounter = 0;
-    private TextView turnCounterW;
-    private TextView turnCounterB;
+    private TextView[][] fields = new TextView[8][8];               // Initialize textview array of the chess board
+    private ArrayList<Pieces> bl_pieces = new ArrayList();          // ArrayList of black pieces
+    private ArrayList<Pieces> w_pieces = new ArrayList();           // ArrayList of white pieces
+    private ImageView[] imageViewsBl = new ImageView[8];            // ImageViews of the black chess pieces
+    private ImageView[] imageViewsW = new ImageView[8];             // ImageViews of the white chess pieces
 
-    private int whiteMiliSec = 0;
-    private int whiteSec = 60;
-    private int whiteMin = 14;
-    private TextView timerW;
+    private int turnCounter = 0;                                    // Counts the turn amount
+    private TextView turnCounterW;                                  // Turn counter for white player
+    private TextView turnCounterB;                                  // Turn counter for black player
 
-    private int blackMiliSec = 0;
-    private int blackSec = 60;
-    private int blackMin = 14;
-    private TextView timerB;
+    private int whiteMiliSec = 0;                                   // Millisecond counter for white player
+    private int whiteSec = 60;                                      // Second counter for white player
+    private int whiteMin = 14;                                      // Minute counter for white player
+    private TextView timerW;                                        // Textview to show the white players timer
 
-    private GameController GC;
+    private int blackMiliSec = 0;                                   // Millisecond counter for black player
+    private int blackSec = 60;                                      // Second counter for black player
+    private int blackMin = 14;                                      // Minute counter for black player
+    private TextView timerB;                                        // Textview to show the black players timer
+
+    private GameController GC;                                      // Initialize GameController
 
     //Create instances
     @Override
@@ -65,48 +66,64 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
 
         field = findViewById(R.id.schachfeld);
 
-
+        //Assign view to active player turn
         playerTurnDisplayW = findViewById(R.id.zugBestätigenButton);
         playerTurnDisplayB = findViewById(R.id.zugBestätigenButton180);
 
+        //Assign view to startGame button
         start = findViewById(R.id.startGame);
 
+        //Assign mute sound and help views to buttons
         ImageButton muteSound = findViewById(R.id.soundIngameButton);
         ImageButton helpButton = findViewById(R.id.helpButton);
 
+        //Assign turn counter views of both players to textViews
         turnCounterW = findViewById(R.id.counterTextView);
         turnCounterB = findViewById(R.id.counter180TextView);
+
+        //Set default amount of turns at the start of each game
         turnCounterW.setText("Züge: 0");
         turnCounterB.setText("Züge: 0");
 
+        //Assign timer views of both players to textViews
         timerW = findViewById(R.id.timeTextView);
-        timerW.setText("Zeit: 15:00");
         timerB = findViewById(R.id.time180TextView);
-        timerB.setText("Zeit:15:00");
 
+        //Set default amount of time each game
+        timerW.setText("Zeit: 15:00");
+        timerB.setText("Zeit: 15:00");
+
+        //Call initializeField to set chess board to starting state of a game
         initializeField();
+
+        //Create onClickListener for start button to start the chess game
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                piecesOnStartposition();
-                start.setVisibility(View.INVISIBLE);
-                playerTurnDisplayW.setText(" !White starts! ");
-                playerTurnDisplayB.setText(" !White starts! ");
-                whiteTurn = true;
+                piecesOnStartposition(); //Set pieces on their starting position
+                start.setVisibility(View.INVISIBLE); //Set start button to invisible
+
+                //Set text for starting player
+                playerTurnDisplayW.setText(" !Weiß startet! "); //
+                playerTurnDisplayB.setText(" !Weiß startet! "); //
+                whiteTurn = true; // boolean that indicates it's whites turn
             }
         });
 
-        GC = new GameController(fields, w_pieces, bl_pieces, possibles, beatables, whiteTurn, blackTurn, gameOver, timerW, timerB, turnCounterW, turnCounterB, turnCounter,
-                playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
-                getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
+        //GC = new GameController(fields, w_pieces, bl_pieces, possibles, beatables, whiteTurn, blackTurn, gameOver, timerW, timerB, turnCounterW, turnCounterB, turnCounter,
+        //        playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
+        //        getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
+
+        // Create timertask that updates the game state and calls the turn functions every 10ms
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
 
                 if (whiteMin < 0 || blackMin < 0 || gameOver) {
-                    timer.cancel();
+                    timer.cancel(); // Cancel timer if the timer ran out or checkmate happened
                 }
+                // As long as the game is not over, call whiteTurn and blackTurn functions, as well as check gameOver conditions
                 if (!gameOver) {
 //                    GC.whiteTurn(whiteTurn,whiteMiliSec,whiteSec,whiteMin,clickedPositionHasChanged,clickedXPosition,clickedYPosition,turn);
 //                    GC.blackTurn(blackTurn,blackMiliSec,blackSec,blackMin,clickedPositionHasChanged,clickedXPosition,clickedYPosition,turn);
@@ -114,7 +131,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                     blackTurn(blackTurn);
                     gameOverCondition();
                 }
-
             }
         };
         timer.schedule(timerTask, 10, 50);
@@ -344,7 +360,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         return fields[y][x];
     }
 
-    //Get chess piece by id
+    //Get chess piece by piece id
     public Pieces getPiece(int id) {
         for (Pieces p : w_pieces) {
             if (p.getId() == id) {
@@ -381,10 +397,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         possibles.clear();
         beatables.clear();
 
-        //Check conditions for pawn
+        //Check possible moves and possible beatable pieces for pawn
         if (p instanceof Bauer) {
             //Check white pawn
-            if (p.getColor().equalsIgnoreCase("weiß")) {
+            if (p.getColor().equalsIgnoreCase("weiß") && p.getyPosition() < 7) {
                 if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 1) && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 2)) {//firstTurn ==true
                     possibles.add(getField(p.getxPosition(), p.getyPosition() + 2));
                     //((Bauer) p).setFirstTurn(false);
@@ -395,12 +411,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 if (p.getxPosition() < 7 && isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 1) && !takenBy(p.getxPosition() + 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() + 1, p.getyPosition() + 1));
                 }
-                if (p.getxPosition() > 0 && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 1) && !takenBy(p.getxPosition() + 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
+                if (p.getxPosition() > 0 && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 1) && !takenBy(p.getxPosition() - 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() - 1, p.getyPosition() + 1));
                 }
             }
             //Check black pawn
-            if (p.getColor().equalsIgnoreCase("schwarz")) {
+            if (p.getColor().equalsIgnoreCase("schwarz") && p.getyPosition() > 0) {
                 if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 1) && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 2)) {//firstTurn ==true
                     possibles.add(getField(p.getxPosition(), p.getyPosition() - 2));
                     //((Bauer) p).setFirstTurn(false);
@@ -417,7 +433,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
-        //Check conditions of knight
+        //Check possible moves and possible beatable pieces for knight
         if (p instanceof Springer) {
             //front right
             if (!isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 2) && p.getxPosition() + 1 < 8 && p.getyPosition() + 2 < 8) {
@@ -469,7 +485,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
-        //Check conditions of rook
+        //Check possible moves and possible beatable pieces for rook
         if (p instanceof Turm) {
             //front
             for (int i = 1; i <= 7; i++) {
@@ -533,7 +549,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
-        //Check conditions of bishop
+        //Check possible moves and possible beatable pieces for bishop
         if (p instanceof Läufer) {
             //front right
             for (int i = 1; i <= 7; i++) {
@@ -597,7 +613,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
-        //Check conditions of queen
+        //Check possible moves and possible beatable pieces for queen
         if (p instanceof Dame) {
             //front
             for (int i = 1; i <= 7; i++) {
@@ -721,6 +737,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
+        //Check possible moves and possible beatable pieces for king
         if (p instanceof König) {
             //front
             if (p.getyPosition() + 1 <= 7) {
@@ -843,7 +860,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-        //Highlight beatable right
+        //Highlight beatable red
         for (TextView t : beatables) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -921,7 +938,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
 
             if (clickedPositionHasChanged) {
-                if (turn % 2 == 1) {
+                if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
                         if (getPiece(clickedXPosition, clickedYPosition) != null) {
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
@@ -933,7 +950,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                         clickedPositionHasChanged = false;
                     } else {
                         clickedPositionHasChanged = false;
-                        turn++;
+                        clickedCounter++;
                     }
                 } else {
                     if (tmpPiece < 16) {
@@ -1038,7 +1055,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
 
             if (clickedPositionHasChanged) {
-                if (turn % 2 == 1) {
+                if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
                         if (getPiece(clickedXPosition, clickedYPosition) != null) {
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
@@ -1051,7 +1068,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
 
                     } else {
                         clickedPositionHasChanged = false;
-                        turn++;
+                        clickedCounter++;
                     }
                 } else {
                     if (tmpPiece > 15) {
@@ -1433,7 +1450,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 setClickedYPosition(7);
                 break;
         }
-        turn++;
+        clickedCounter++;
         clickedPositionHasChanged = true;
     }
 
