@@ -401,33 +401,45 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         if (p instanceof Bauer) {
             //Check white pawn
             if (p.getColor().equalsIgnoreCase("weiß") && p.getyPosition() < 7) {
-                if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 1) && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 2)) {//firstTurn ==true
+                if (((Bauer) p).isFirstTurn()
+                        && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 1)
+                        && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 2)) {//firstTurn ==true
                     possibles.add(getField(p.getxPosition(), p.getyPosition() + 2));
                     //((Bauer) p).setFirstTurn(false);
                 }
                 if (!isClickedFieldTaken(p.getxPosition(), p.getyPosition() + 1)) {
                     possibles.add(getField(p.getxPosition(), p.getyPosition() + 1));
                 }
-                if (p.getxPosition() < 7 && isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 1) && !takenBy(p.getxPosition() + 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
+                if (p.getxPosition() < 7
+                        && isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 1)
+                        && !takenBy(p.getxPosition() + 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() + 1, p.getyPosition() + 1));
                 }
-                if (p.getxPosition() > 0 && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 1) && !takenBy(p.getxPosition() - 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
+                if (p.getxPosition() > 0
+                        && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 1)
+                        && !takenBy(p.getxPosition() - 1, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() - 1, p.getyPosition() + 1));
                 }
             }
             //Check black pawn
             if (p.getColor().equalsIgnoreCase("schwarz") && p.getyPosition() > 0) {
-                if (((Bauer) p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 1) && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 2)) {//firstTurn ==true
+                if (((Bauer) p).isFirstTurn()
+                        && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 1)
+                        && !isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 2)) {//firstTurn ==true
                     possibles.add(getField(p.getxPosition(), p.getyPosition() - 2));
                     //((Bauer) p).setFirstTurn(false);
                 }
                 if (!isClickedFieldTaken(p.getxPosition(), p.getyPosition() - 1)) {
                     possibles.add(getField(p.getxPosition(), p.getyPosition() - 1));
                 }
-                if (p.getxPosition() < 7 && isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 1) && !takenBy(p.getxPosition() + 1, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
+                if (p.getxPosition() < 7
+                        && isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 1)
+                        && !takenBy(p.getxPosition() + 1, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() + 1, p.getyPosition() - 1));
                 }
-                if (p.getxPosition() > 0 && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 1) && !takenBy(p.getxPosition() - 1, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
+                if (p.getxPosition() > 0
+                        && isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 1)
+                        && !takenBy(p.getxPosition() - 1, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
                     beatables.add(getField(p.getxPosition() - 1, p.getyPosition() - 1));
                 }
             }
@@ -436,51 +448,85 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         //Check possible moves and possible beatable pieces for knight
         if (p instanceof Springer) {
             //front right
-            if (!isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 2) && p.getxPosition() + 1 < 8 && p.getyPosition() + 2 < 8) {
+            if (!isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 2)
+                    && p.getxPosition() + 1 < 8
+                    && p.getyPosition() + 2 < 8) {
                 possibles.add(getField(p.getxPosition() + 1, p.getyPosition() + 2));
-            } else if (isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 2) && p.getxPosition() + 1 < 8 && p.getyPosition() + 2 < 8 && !takenBy(p.getxPosition() + 1, p.getyPosition() + 2).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() + 2)
+                    && p.getxPosition() + 1 < 8 && p.getyPosition() + 2 < 8
+                    && !takenBy(p.getxPosition() + 1, p.getyPosition() + 2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() + 1, p.getyPosition() + 2));
             }
             //front left
-            if (!isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 2) && p.getxPosition() - 1 > -1 && p.getyPosition() + 2 < 8) {
+            if (!isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 2)
+                    && p.getxPosition() - 1 > -1
+                    && p.getyPosition() + 2 < 8) {
                 possibles.add(getField(p.getxPosition() - 1, p.getyPosition() + 2));
-            } else if (isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 2) && p.getxPosition() - 1 > -1 && p.getyPosition() + 2 < 8 && !takenBy(p.getxPosition() - 1, p.getyPosition() + 2).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() + 2)
+                    && p.getxPosition() - 1 > -1 && p.getyPosition() + 2 < 8
+                    && !takenBy(p.getxPosition() - 1, p.getyPosition() + 2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() - 1, p.getyPosition() + 2));
             }
             //back right
-            if (!isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 2) && p.getxPosition() + 1 < 8 && p.getyPosition() - 2 > -1) {
+            if (!isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 2)
+                    && p.getxPosition() + 1 < 8
+                    && p.getyPosition() - 2 > -1) {
                 possibles.add(getField(p.getxPosition() + 1, p.getyPosition() - 2));
-            } else if (isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 2) && p.getxPosition() + 1 < 8 && p.getyPosition() - 2 > -1 && !takenBy(p.getxPosition() + 1, p.getyPosition() - 2).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() + 1, p.getyPosition() - 2)
+                    && p.getxPosition() + 1 < 8 && p.getyPosition() - 2 > -1
+                    && !takenBy(p.getxPosition() + 1, p.getyPosition() - 2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() + 1, p.getyPosition() - 2));
             }
             //back left
-            if (!isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 2) && p.getxPosition() - 1 > -1 && p.getyPosition() - 2 > -1) {
+            if (!isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 2)
+                    && p.getxPosition() - 1 > -1
+                    && p.getyPosition() - 2 > -1) {
                 possibles.add(getField(p.getxPosition() - 1, p.getyPosition() - 2));
-            } else if (isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 2) && p.getxPosition() - 1 > -1 && p.getyPosition() - 2 > -1 && !takenBy(p.getxPosition() - 1, p.getyPosition() - 2).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() - 1, p.getyPosition() - 2)
+                    && p.getxPosition() - 1 > -1 && p.getyPosition() - 2 > -1
+                    && !takenBy(p.getxPosition() - 1, p.getyPosition() - 2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() - 1, p.getyPosition() - 2));
             }
             //right front
-            if (!isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() + 1) && p.getxPosition() + 2 < 8 && p.getyPosition() + 1 < 8) {
+            if (!isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() + 1)
+                    && p.getxPosition() + 2 < 8
+                    && p.getyPosition() + 1 < 8) {
                 possibles.add(getField(p.getxPosition() + 2, p.getyPosition() + 1));
-            } else if (isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() + 1) && p.getxPosition() + 2 < 8 && p.getyPosition() + 1 < 8 && !takenBy(p.getxPosition() + 2, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() + 1)
+                    && p.getxPosition() + 2 < 8 && p.getyPosition() + 1 < 8
+                    && !takenBy(p.getxPosition() + 2, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() + 2, p.getyPosition() + 1));
             }
             //right back
-            if (!isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() - 1) && p.getxPosition() + 2 < 8 && p.getyPosition() - 1 > -1) {
+            if (!isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() - 1)
+                    && p.getxPosition() + 2 < 8
+                    && p.getyPosition() - 1 > -1) {
                 possibles.add(getField(p.getxPosition() + 2, p.getyPosition() - 1));
-            } else if (isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() - 1) && p.getxPosition() + 2 < 8 && p.getyPosition() - 1 > -1 && !takenBy(p.getxPosition() + 2, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() + 2, p.getyPosition() - 1)
+                    && p.getxPosition() + 2 < 8 && p.getyPosition() - 1 > -1
+                    && !takenBy(p.getxPosition() + 2, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() + 2, p.getyPosition() - 1));
             }
             //left front
-            if (!isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() + 1) && p.getxPosition() - 2 > -1 && p.getyPosition() + 1 < 8) {
+            if (!isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() + 1)
+                    && p.getxPosition() - 2 > -1
+                    && p.getyPosition() + 1 < 8) {
                 possibles.add(getField(p.getxPosition() - 2, p.getyPosition() + 1));
-            } else if (isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() + 1) && p.getxPosition() - 2 > -1 && p.getyPosition() + 1 < 8 && !takenBy(p.getxPosition() - 2, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() + 1)
+                    && p.getxPosition() - 2 > -1
+                    && p.getyPosition() + 1 < 8
+                    && !takenBy(p.getxPosition() - 2, p.getyPosition() + 1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() - 2, p.getyPosition() + 1));
             }
             //left back
-            if (!isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() - 1) && p.getxPosition() - 2 > -1 && p.getyPosition() - 1 > -1) {
+            if (!isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() - 1)
+                    && p.getxPosition() - 2 > -1
+                    && p.getyPosition() - 1 > -1) {
                 possibles.add(getField(p.getxPosition() - 2, p.getyPosition() - 1));
-            } else if (isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() - 1) && p.getxPosition() - 2 > -1 && p.getyPosition() - 1 > -1 && !takenBy(p.getxPosition() - 2, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
+            } else if (isClickedFieldTaken(p.getxPosition() - 2, p.getyPosition() - 1)
+                    && p.getxPosition() - 2 > -1
+                    && p.getyPosition() - 1 > -1
+                    && !takenBy(p.getxPosition() - 2, p.getyPosition() - 1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition() - 2, p.getyPosition() - 1));
             }
         }
@@ -821,8 +867,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
             //Castling left
-            if (p.getxPosition() == 4 && p.getyPosition() == 0 && p.getColor().equalsIgnoreCase("weiß")) {
-                if (!isClickedFieldTaken(3, 0) && !isClickedFieldTaken(2, 0) && !isClickedFieldTaken(1, 0)) {
+            if (p.getxPosition() == 4
+                    && p.getyPosition() == 0
+                    && p.getColor().equalsIgnoreCase("weiß")) {
+                if (!isClickedFieldTaken(3, 0)
+                        && !isClickedFieldTaken(2, 0)
+                        && !isClickedFieldTaken(1, 0)) {
                     if (getPiece(0, 0) != null && getPiece(0, 0) instanceof Turm) {
                         possibles.add(getField(0, 0));
                     }
@@ -833,8 +883,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
             //Castling right
-            if (p.getxPosition() == 4 && p.getyPosition() == 7 && p.getColor().equalsIgnoreCase("schwarz")) {
-                if (!isClickedFieldTaken(3, 7) && !isClickedFieldTaken(2, 7) && !isClickedFieldTaken(1, 7)) {
+            if (p.getxPosition() == 4
+                    && p.getyPosition() == 7
+                    && p.getColor().equalsIgnoreCase("schwarz")) {
+                if (!isClickedFieldTaken(3, 7)
+                        && !isClickedFieldTaken(2, 7)
+                        && !isClickedFieldTaken(1, 7)) {
                     if (getPiece(0, 7) != null && getPiece(0, 7) instanceof Turm) {
                         possibles.add(getField(0, 7));
                     }
@@ -955,8 +1009,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 } else {
                     if (tmpPiece < 16) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß")) {
-                            if (getPiece(tmpPiece) instanceof König && getPiece(clickedXPosition, clickedYPosition) != null && getPiece(clickedXPosition, clickedYPosition) instanceof Turm && getPiece(clickedXPosition, clickedYPosition).getColor().equalsIgnoreCase("weiß")) {
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
+                                && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß")) {
+                            if (getPiece(tmpPiece) instanceof König
+                                    && getPiece(clickedXPosition, clickedYPosition) != null
+                                    && getPiece(clickedXPosition, clickedYPosition) instanceof Turm
+                                    && getPiece(clickedXPosition, clickedYPosition).getColor().equalsIgnoreCase("weiß")) {
                                 if (clickedXPosition == 0) {
                                     getPiece(clickedXPosition, clickedYPosition).getImg().setX(getField(3, 0).getX());
                                     getPiece(clickedXPosition, clickedYPosition).setxPosition(3);
@@ -1073,8 +1131,12 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 } else {
                     if (tmpPiece > 15) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz")) {
-                            if (getPiece(tmpPiece) instanceof König && getPiece(clickedXPosition, clickedYPosition) != null && getPiece(clickedXPosition, clickedYPosition) instanceof Turm && getPiece(clickedXPosition, clickedYPosition).getColor().equalsIgnoreCase("schwarz")) {
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
+                                && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz")) {
+                            if (getPiece(tmpPiece) instanceof König
+                                    && getPiece(clickedXPosition, clickedYPosition) != null
+                                    && getPiece(clickedXPosition, clickedYPosition) instanceof Turm
+                                    && getPiece(clickedXPosition, clickedYPosition).getColor().equalsIgnoreCase("schwarz")) {
                                 if (clickedXPosition == 0) {
                                     getPiece(clickedXPosition, clickedYPosition).getImg().setX(getField(3, 0).getX());
                                     getPiece(clickedXPosition, clickedYPosition).setxPosition(3);

@@ -34,9 +34,14 @@ public class GameController{
     Drawable red;
     Drawable green;
 
-    public GameController(TextView[][] fields, ArrayList<Pieces> w_Pieces, ArrayList<Pieces> bl_Pieces, ArrayList<TextView> possibles, ArrayList<TextView> beatables, boolean whiteTurn,
-                          boolean blackTurn, boolean gameOver, TextView timerW, TextView timerB, TextView turnCounterW, TextView turnCounterB, int turnCounter, Button playerTurnDisplayW,
-                          Button playerTurnDisplayB, Drawable backgroundW, Drawable backgroundB, Drawable red, Drawable green) {
+    public GameController(TextView[][] fields, ArrayList<Pieces> w_Pieces,
+                          ArrayList<Pieces> bl_Pieces, ArrayList<TextView> possibles,
+                          ArrayList<TextView> beatables, boolean whiteTurn,
+                          boolean blackTurn, boolean gameOver, TextView timerW,
+                          TextView timerB, TextView turnCounterW,
+                          TextView turnCounterB, int turnCounter, Button playerTurnDisplayW,
+                          Button playerTurnDisplayB, Drawable backgroundW,
+                          Drawable backgroundB, Drawable red, Drawable green) {
         this.fields = fields;
         this.w_pieces = w_Pieces;
         this.bl_pieces = bl_Pieces;
@@ -150,17 +155,23 @@ public class GameController{
 
 //            p.move();
             if (p.getColor().equalsIgnoreCase("weiß")){
-                if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
+                if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),
+                        p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),
+                        p.getyPosition()+2)){ //firstTurn ==true
                     possibles.add(getField(p.getxPosition(),p.getyPosition()+2));
                     //((Bauer) p).setFirstTurn(false);
                 }
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
                     possibles.add(getField(p.getxPosition(),p.getyPosition()+1));
                 }
-                if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                if (p.getxPosition() <7
+                        && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1)
+                        && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
                     beatables.add(getField(p.getxPosition()+1,p.getyPosition()+1));
                 }
-                if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
+                if (p.getxPosition()>0
+                        && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1)
+                        && !takenBy(p.getxPosition()+1,p.getyPosition()+1).equalsIgnoreCase(p.getColor())){
                     beatables.add(getField(p.getxPosition()-1,p.getyPosition()+1));
                 }
             }
@@ -168,17 +179,23 @@ public class GameController{
             if (p.getColor().equalsIgnoreCase("schwarz")){
 
 
-                if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
+                if (((Bauer)p).isFirstTurn()
+                        && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)
+                        && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
                     possibles.add(getField(p.getxPosition(),p.getyPosition()-2));
                     //((Bauer) p).setFirstTurn(false);
                 }
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
                     possibles.add(getField(p.getxPosition(),p.getyPosition()-1));
                 }
-                if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                if (p.getxPosition() <7
+                        && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1)
+                        && !takenBy(p.getxPosition()+1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
                     beatables.add(getField(p.getxPosition()+1,p.getyPosition()-1));
                 }
-                if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
+                if (p.getxPosition()>0
+                        && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1)
+                        && !takenBy(p.getxPosition()-1,p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
                     beatables.add(getField(p.getxPosition()-1,p.getyPosition()-1));
                 }
             }
@@ -189,59 +206,96 @@ public class GameController{
 
 
             //vorne rechts
-            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8){
+            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2)
+                    && p.getxPosition()+1<8
+                    && p.getyPosition()+2<8){
                 possibles.add(getField(p.getxPosition()+1, p.getyPosition()+2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2) && p.getxPosition()+1<8 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()+1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2)
+                    && p.getxPosition()+1<8 && p.getyPosition()+2<8
+                    && !takenBy(p.getxPosition()+1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()+1, p.getyPosition()+2));
             }
             //vorne links
-            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8){
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2)
+                    && p.getxPosition()-1>-1
+                    && p.getyPosition()+2<8){
                 possibles.add(getField(p.getxPosition()-1,p.getyPosition()+2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2) && p.getxPosition()-1>-1 && p.getyPosition()+2<8 && !takenBy(p.getxPosition()-1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+2)
+                    && p.getxPosition()-1>-1
+                    && p.getyPosition()+2<8
+                    && !takenBy(p.getxPosition()-1,p.getyPosition()+2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()-1, p.getyPosition()+2));
             }
             //hinten rechts
-            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1){
+            if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2)
+                    && p.getxPosition()+1<8
+                    && p.getyPosition()-2>-1){
                 possibles.add(getField(p.getxPosition()+1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2) && p.getxPosition()+1<8 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()+1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-2)
+                    && p.getxPosition()+1<8
+                    && p.getyPosition()-2>-1
+                    && !takenBy(p.getxPosition()+1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()+1, p.getyPosition()-2));
             }
             //hinten links
-            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1){
+            if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2)
+                    && p.getxPosition()-1>-1
+                    && p.getyPosition()-2>-1){
                 possibles.add(getField(p.getxPosition()-1, p.getyPosition()-2));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2) && p.getxPosition()-1>-1 && p.getyPosition()-2>-1 && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-2)
+                    && p.getxPosition()-1>-1
+                    && p.getyPosition()-2>-1
+                    && !takenBy(p.getxPosition()-1,p.getyPosition()-2).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()-1, p.getyPosition()-2));
             }
             //rechts vorne
-            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8){
+            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1)
+                    && p.getxPosition()+2<8
+                    && p.getyPosition()+1<8){
                 possibles.add(getField(p.getxPosition()+2, p.getyPosition()+1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1) && p.getxPosition()+2<8 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()+2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()+1)
+                    && p.getxPosition()+2<8 && p.getyPosition()+1<8
+                    && !takenBy(p.getxPosition()+2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()+2, p.getyPosition()+1));
             }
             //rechts hinten
-            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1){
+            if (!isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1)
+                    && p.getxPosition()+2<8
+                    && p.getyPosition()-1>-1){
                 possibles.add(getField(p.getxPosition()+2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1) && p.getxPosition()+2<8 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()+2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()+2,p.getyPosition()-1)
+                    && p.getxPosition()+2<8
+                    && p.getyPosition()-1>-1
+                    && !takenBy(p.getxPosition()+2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()+2, p.getyPosition()-1));
             }
             //links vorne
-            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8){
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1)
+                    && p.getxPosition()-2>-1 && p.getyPosition()+1<8){
                 possibles.add(getField(p.getxPosition()-2, p.getyPosition()+1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1) && p.getxPosition()-2>-1 && p.getyPosition()+1<8 && !takenBy(p.getxPosition()-2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()+1)
+                    && p.getxPosition()-2>-1
+                    && p.getyPosition()+1<8
+                    && !takenBy(p.getxPosition()-2,p.getyPosition()+1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()-2, p.getyPosition()+1));
             }
             //links hinten
-            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1){
+            if (!isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1)
+                    && p.getxPosition()-2>-1
+                    && p.getyPosition()-1>-1){
                 possibles.add(getField(p.getxPosition()-2, p.getyPosition()-1));
             }
-            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1) && p.getxPosition()-2>-1 && p.getyPosition()-1>-1 && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
+            else if (isClickedFieldTaken(p.getxPosition()-2,p.getyPosition()-1)
+                    && p.getxPosition()-2>-1
+                    && p.getyPosition()-1>-1
+                    && !takenBy(p.getxPosition()-2,p.getyPosition()-1).equalsIgnoreCase(p.getColor())) {
                 beatables.add(getField(p.getxPosition()-2, p.getyPosition()-1));
             }
         }
@@ -606,8 +660,12 @@ public class GameController{
             }
 
             //Rochade
-            if(p.getxPosition()==4 && p.getyPosition()==0 && p.getColor().equalsIgnoreCase("weiß")){
-                if (!isClickedFieldTaken(3,0) && !isClickedFieldTaken(2,0) && !isClickedFieldTaken(1,0)) {
+            if(p.getxPosition()==4
+                    && p.getyPosition()==0
+                    && p.getColor().equalsIgnoreCase("weiß")){
+                if (!isClickedFieldTaken(3,0)
+                        && !isClickedFieldTaken(2,0)
+                        && !isClickedFieldTaken(1,0)) {
                     if (getPiece(0, 0) != null && getPiece(0, 0) instanceof Turm) {
                         possibles.add(getField(0, 0));
                     }
@@ -618,8 +676,12 @@ public class GameController{
                 }
             }
 
-            if(p.getxPosition()==4 && p.getyPosition()==7 && p.getColor().equalsIgnoreCase("schwarz")){
-                if (!isClickedFieldTaken(3,7) && !isClickedFieldTaken(2,7) && !isClickedFieldTaken(1,7)) {
+            if(p.getxPosition()==4
+                    && p.getyPosition()==7
+                    && p.getColor().equalsIgnoreCase("schwarz")){
+                if (!isClickedFieldTaken(3,7)
+                        && !isClickedFieldTaken(2,7)
+                        && !isClickedFieldTaken(1,7)) {
                     if (getPiece(0, 7) != null && getPiece(0, 7) instanceof Turm) {
                         possibles.add(getField(0, 7));
                     }
@@ -657,10 +719,11 @@ public class GameController{
         }
     }
 
-    void whiteTurn(boolean playerTurn, int whiteMiliSec, int whiteSec, int whiteMin, boolean clickedPositionhasChanged, int clickedXPosition, int clickedYPosition, int turn)
+    void whiteTurn(boolean playerTurn, int whiteMiliSec, int whiteSec,
+                   int whiteMin, boolean clickedPositionhasChanged,
+                   int clickedXPosition, int clickedYPosition, int turn)
     {
-        if(playerTurn)
-        {
+        if(playerTurn) {
             whiteMiliSec+=50;
             if (whiteMiliSec==1000){
                 whiteSec--;
@@ -668,8 +731,7 @@ public class GameController{
                 if(whiteSec==0){
                     whiteMin--;
                     whiteSec=60;
-                }
-                if (whiteSec!=60&&whiteSec>9){
+                } if (whiteSec!=60&&whiteSec>9){
                     try{
                         timerW.setText("Zeit:"+whiteMin+":"+whiteSec);
                     }catch (Exception e){}
@@ -684,14 +746,10 @@ public class GameController{
                 }
             }
 
-            if (clickedPositionhasChanged)
-            {
-                if (turn % 2 == 1)
-                {
-                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
-                    {
-                        if (getPiece(clickedXPosition, clickedYPosition) != null)
-                        {
+            if (clickedPositionhasChanged) {
+                if (turn % 2 == 1) {
+                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
+                        if (getPiece(clickedXPosition, clickedYPosition) != null) {
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
                             if (tmpPiece>15){
                                 return;
@@ -699,29 +757,26 @@ public class GameController{
                             showPossibles(getPiece(tmpPiece));
                         }
                         clickedPositionhasChanged = false;
-
-                    }
-                    else
-                    {
+                    } else {
                         clickedPositionhasChanged = false;
                         turn++;
                     }
                 }
-                else
-                {
-                    if (tmpPiece < 16)
-                    {
+                else {
+                    if (tmpPiece < 16) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß"))
-                        {
-                            if (getPiece(tmpPiece)instanceof König&&  getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("weiß")){
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
+                                && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß")) {
+                            if (getPiece(tmpPiece)instanceof König
+                                    && getPiece(clickedXPosition,clickedYPosition)!=null
+                                    && getPiece(clickedXPosition,clickedYPosition)instanceof Turm
+                                    && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("weiß")){
                                 if (clickedXPosition==0){
                                     getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(3,0).getX());
                                     getPiece(clickedXPosition,clickedYPosition).setxPosition(3);
                                     getPiece(tmpPiece).getImg().setX(getField(2,0).getX());
                                     getPiece(tmpPiece).setxPosition(2);
                                 } else {
-
                                     getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(5,0).getX());
                                     getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
                                     getPiece(tmpPiece).getImg().setX(getField(6,0).getX());
@@ -742,8 +797,7 @@ public class GameController{
                                 return;
                             }
                         }
-                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition)))
-                        {
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -752,8 +806,7 @@ public class GameController{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
-                            if(getPiece(tmpPiece) instanceof Bauer)
-                            {
+                            if(getPiece(tmpPiece) instanceof Bauer) {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             whiteTurn = false;
@@ -763,14 +816,12 @@ public class GameController{
                             turnCounter++;
                             refreshTurnCounter();
                         }
-                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition)))
-                        {
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
-                            if(getPiece(tmpPiece) instanceof Bauer)
-                            {
+                            if(getPiece(tmpPiece) instanceof Bauer) {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             whiteTurn = false;
@@ -790,10 +841,11 @@ public class GameController{
         }
     }
 
-    void blackTurn(boolean playerTurn, int blackMiliSec, int blackSec, int blackMin, boolean clickedPositionhasChanged, int clickedXPosition, int clickedYPosition, int turn)
+    void blackTurn(boolean playerTurn, int blackMiliSec, int blackSec,
+                   int blackMin, boolean clickedPositionhasChanged,
+                   int clickedXPosition, int clickedYPosition, int turn)
     {
-        if(playerTurn)
-        {
+        if(playerTurn) {
             blackMiliSec+=50;
             if (blackMiliSec==1000){
                 blackSec--;
@@ -817,14 +869,10 @@ public class GameController{
                 }
             }
 
-            if (clickedPositionhasChanged)
-            {
-                if (turn % 2 == 1)
-                {
-                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition))
-                    {
-                        if (getPiece(clickedXPosition, clickedYPosition) != null)
-                        {
+            if (clickedPositionhasChanged) {
+                if (turn % 2 == 1) {
+                    if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
+                        if (getPiece(clickedXPosition, clickedYPosition) != null) {
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
                             if (tmpPiece<16){
                                 return;
@@ -832,21 +880,16 @@ public class GameController{
                             showPossibles(getPiece(tmpPiece));
                         }
                         clickedPositionhasChanged = false;
-
                     }
-                    else
-                    {
+                    else {
                         clickedPositionhasChanged = false;
                         turn++;
                     }
                 }
-                else
-                {
-                    if (tmpPiece > 15)
-                    {
+                else{
+                    if (tmpPiece > 15) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
-                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz"))
-                        {
+                        if (isClickedFieldTaken(clickedXPosition, clickedYPosition) && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("schwarz")) {
                             if (getPiece(tmpPiece)instanceof König&&  getPiece(clickedXPosition,clickedYPosition)!=null && getPiece(clickedXPosition,clickedYPosition)instanceof Turm && getPiece(clickedXPosition,clickedYPosition).getColor().equalsIgnoreCase("schwarz")){
                                 if (clickedXPosition==0){
                                     getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(3,0).getX());
@@ -854,7 +897,6 @@ public class GameController{
                                     getPiece(tmpPiece).getImg().setX(getField(2,0).getX());
                                     getPiece(tmpPiece).setxPosition(2);
                                 } else {
-
                                     getPiece(clickedXPosition,clickedYPosition).getImg().setX(getField(5,0).getX());
                                     getPiece(clickedXPosition,clickedYPosition).setxPosition(5);
                                     getPiece(tmpPiece).getImg().setX(getField(6,0).getX());
@@ -875,8 +917,7 @@ public class GameController{
                                 return;
                             }
                         }
-                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition)))
-                        {
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -885,8 +926,7 @@ public class GameController{
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
-                            if(getPiece(tmpPiece) instanceof Bauer)
-                            {
+                            if(getPiece(tmpPiece) instanceof Bauer) {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             blackTurn = false;
@@ -896,14 +936,12 @@ public class GameController{
                             turnCounter++;
                             refreshTurnCounter();
                         }
-                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition)))
-                        {
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
-                            if(getPiece(tmpPiece) instanceof Bauer)
-                            {
+                            if(getPiece(tmpPiece) instanceof Bauer) {
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
                             blackTurn = false;
