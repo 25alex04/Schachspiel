@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 public class Turm extends Pieces{
 
+    //constructor for rook
     public Turm(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
         super.img = img;
@@ -13,11 +14,13 @@ public class Turm extends Pieces{
         super.id = id;
     }
 
+    //planned move()-attack
     @Override
     void move() {
 
     }
 
+    //planed attack()-method
     @Override
     void attack() {
 

@@ -18,6 +18,7 @@ public class Gameover extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Intent for post-game
         Intent i = getIntent();
         if (i.hasExtra(DATA_KEY)){
             data = i.getStringExtra(DATA_KEY);
@@ -28,12 +29,13 @@ public class Gameover extends AppCompatActivity {
             }
         }
 
-
+        //create buttons for post-game
         Button menu = findViewById(R.id.whiteGameOverMenuButton);
         Button replay = findViewById(R.id.whiteGameOverReplayButton);
 
 
 
+        //onClickListener for the menu-Button
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +44,7 @@ public class Gameover extends AppCompatActivity {
             }
         });
 
+        //onClickListener for the replay-Button
         replay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

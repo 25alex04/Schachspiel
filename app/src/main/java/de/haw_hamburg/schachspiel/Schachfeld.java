@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 public class Schachfeld {
 
+    //ArrayList to create field
     ArrayList<Feld> felder = new ArrayList();
 
+    //method to initialise field
     public Schachfeld() {
-
         for(int x = 0; x <8; x++){
             for(int y = 0; y<8;y++){
                 felder.add(new Feld(x,y));
@@ -15,6 +16,7 @@ public class Schachfeld {
         }
     }
 
+    //method to return field
     public ArrayList<Feld> getFelder() {
         return felder;
     }
