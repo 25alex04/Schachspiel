@@ -17,7 +17,7 @@ import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener {
 
-
+    private boolean test=true;
     private boolean clickedPositionHasChanged = false;              // boolean: true if a player clicked on a chess square to move a piece
     private static final String DATA_KEY = "GameView.Data";         // key to  access information in different intents
     private Button playerTurnDisplayW;                              // Button that shows the active players turn
