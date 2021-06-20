@@ -42,18 +42,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     private ImageView[] imageViewsBl = new ImageView[8];            // ImageViews of the black chess pieces
     private ImageView[] imageViewsW = new ImageView[8];             // ImageViews of the white chess pieces
 
-    private int turnCounter = 0;                                    // Counts the turn amount
     private TextView turnCounterW;                                  // Turn counter for white player
     private TextView turnCounterB;                                  // Turn counter for black player
 
-    private int whiteMiliSec = 0;                                   // Millisecond counter for white player
-    private int whiteSec = 60;                                      // Second counter for white player
-    private int whiteMin = 14;                                      // Minute counter for white player
+//    private int whiteMiliSec = 0;                                   // Millisecond counter for white player
+//    private int whiteSec = 60;                                      // Second counter for white player
+//    private int whiteMin = 14;                                      // Minute counter for white player
     private TextView timerW;                                        // Textview to show the white players timer
 
-    private int blackMiliSec = 0;                                   // Millisecond counter for black player
-    private int blackSec = 60;                                      // Second counter for black player
-    private int blackMin = 14;                                      // Minute counter for black player
+//    private int blackMiliSec = 0;                                   // Millisecond counter for black player
+//    private int blackSec = 60;                                      // Second counter for black player
+//    private int blackMin = 14;                                      // Minute counter for black player
     private TextView timerB;                                        // Textview to show the black players timer
 
     private GameController GC;                                      // Initialize GameController
@@ -110,17 +109,16 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        //GC = new GameController(fields, w_pieces, bl_pieces, possibles, beatables, whiteTurn, blackTurn, gameOver, timerW, timerB, turnCounterW, turnCounterB, turnCounter,
-        //        playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
-        //        getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
-
         // Create timertask that updates the game state and calls the turn functions every 10ms
+
+        GC = new GameController();
+
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
 
-                if (whiteMin < 0 || blackMin < 0 || gameOver) {
+                if (GC.getWhiteMin() < 0 || GC.getBlackMin() < 0 || gameOver) {
                     timer.cancel(); // Cancel timer if the timer ran out or checkmate happened
                 }
                 // As long as the game is not over, call whiteTurn and blackTurn functions, as well as check gameOver conditions
@@ -962,34 +960,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void whiteTurn(boolean playerTurn) {
         if (playerTurn) {
-            whiteMiliSec += 50;
-            if (whiteMiliSec == 1000) {
-                whiteSec--;
-                whiteMiliSec = 0;
-                if (whiteSec == 0) {
-                    whiteMin--;
-                    whiteSec = 60;
-                }
-                if (whiteSec != 60 && whiteSec > 9) {
-                    try {
-                        timerW.setText("Zeit:" + whiteMin + ":" + whiteSec);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (whiteSec < 10) {
-                    try {
-                        timerW.setText("Zeit:" + whiteMin + ":0" + whiteSec);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        timerW.setText("Zeit:" + (whiteMin + 1) + ":00");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+
+            GC.refreshTimer(timerW,"white");
 
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
@@ -1031,8 +1003,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                 blackTurn = true;
                                 playerTurnDisplayW.setText("Not your turn");
                                 playerTurnDisplayB.setText("Your turn");
-                                turnCounter++;
-                                refreshTurnCounter();
+                                GC.refreshTurnCounter(turnCounterW,turnCounterB);
                                 undoPossibles();
                                 clickedPositionHasChanged = false;
                                 return;
@@ -1057,8 +1028,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             blackTurn = true;
                             playerTurnDisplayW.setText("Not your turn");
                             playerTurnDisplayB.setText("Your turn");
-                            turnCounter++;
-                            refreshTurnCounter();
+                            GC.refreshTurnCounter(turnCounterW,turnCounterB);
                         } else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
@@ -1071,8 +1041,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             blackTurn = true;
                             playerTurnDisplayW.setText("Not your turn");
                             playerTurnDisplayB.setText("Your turn");
-                            turnCounter++;
-                            refreshTurnCounter();
+                            GC.refreshTurnCounter(turnCounterW,turnCounterB);
                         }
                     } else {
                         return;
@@ -1086,31 +1055,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void blackTurn(boolean playerTurn) {
         if (playerTurn) {
-            blackMiliSec += 50;
-            if (blackMiliSec == 1000) {
-                blackSec--;
-                blackMiliSec = 0;
-                if (blackSec == 0) {
-                    blackMin--;
-                    blackSec = 60;
-                }
-                if (blackSec != 60 && blackSec > 9) {
-                    try {
-                        timerB.setText("Zeit:" + blackMin + ":" + blackSec);
-                    } catch (Exception e) {
-                    }
-                } else if (blackSec < 10) {
-                    try {
-                        timerB.setText("Zeit:" + blackMin + ":0" + blackSec);
-                    } catch (Exception e) {
-                    }
-                } else {
-                    try {
-                        timerB.setText("Zeit:" + (blackMin + 1) + ":00");
-                    } catch (Exception e) {
-                    }
-                }
-            }
+
+            GC.refreshTimer(timerB,"black");
 
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
@@ -1153,8 +1099,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                 whiteTurn = true;
                                 playerTurnDisplayW.setText("Your turn");
                                 playerTurnDisplayB.setText("Not your turn");
-                                turnCounter++;
-                                refreshTurnCounter();
+                                GC.refreshTurnCounter(turnCounterW,turnCounterB);
                                 undoPossibles();
                                 clickedPositionHasChanged = false;
                                 return;
@@ -1179,8 +1124,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             whiteTurn = true;
                             playerTurnDisplayW.setText("Your turn");
                             playerTurnDisplayB.setText("Not your turn");
-                            turnCounter++;
-                            refreshTurnCounter();
+                            GC.refreshTurnCounter(turnCounterW,turnCounterB);
                         } else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
@@ -1193,8 +1137,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             whiteTurn = true;
                             playerTurnDisplayW.setText("Your turn");
                             playerTurnDisplayB.setText("Not your turn");
-                            turnCounter++;
-                            refreshTurnCounter();
+                            GC.refreshTurnCounter(turnCounterW,turnCounterB);
                         }
                     } else {
                         return;
@@ -1227,26 +1170,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         }
 
         //Check if any timer ran out
-        if (whiteMin < 0) {
+        if (GC.getWhiteMin() < 0) {
             Intent intent = new Intent(GameView.this, Gameover.class);
             intent.putExtra(DATA_KEY, "white");
             startActivity(intent);
             gameOver = true;
         }
-        if (blackMin <= 0) {
+        if (GC.getBlackMin() <= 0) {
             Intent intent = new Intent(GameView.this, Gameover.class);
             intent.putExtra(DATA_KEY, "black");
             startActivity(intent);
             gameOver = true;
-        }
-    }
-
-    //Turn Counter
-    public void refreshTurnCounter() {
-        if (turnCounter % 2 == 1) {
-            turnCounterW.setText("Züge: " + ((turnCounter - 1) / 2 + 1));
-        } else {
-            turnCounterB.setText("Züge: " + (turnCounter / 2));
         }
     }
 
