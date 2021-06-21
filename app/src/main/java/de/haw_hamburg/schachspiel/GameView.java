@@ -17,42 +17,41 @@ import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener {
 
-    private boolean test=true;
-    private boolean clickedPositionHasChanged = false;              // boolean: true if a player clicked on a chess square to move a piece
+
     private static final String DATA_KEY = "GameView.Data";         // key to  access information in different intents
-    private Button playerTurnDisplayW;                              // Button that shows the active players turn
-    private Button playerTurnDisplayB;                              // Button that shows the active players turn
+
     private Button start;                                           // Button to start the chess game
+
     private int clickedXPosition;                                   // Holds X coordinate of clicked position
     private int clickedYPosition;                                   // Holds Y coordinate of clicked position
+    private boolean clickedPositionHasChanged = false;              // boolean: true if a player clicked on a chess square to move a piece
+
     private int clickedCounter = 0;                                 // Counts the amount of clicks
-    private int tmpPiece = 0;                                       // Remembers clicked piece until piece move is confirmed
+    private Button playerTurnDisplayW;                              // Button that shows the active players turn
+    private Button playerTurnDisplayB;                              // Button that shows the active players turn
+
     private boolean whiteTurn = false;                              // boolean: true if it's the white players turn
     private boolean blackTurn = false;                              // boolean: true if it's the black players turn
     private boolean gameOver = false;                               // boolean: true if one of the player lost the game by time or by checkmate
-    private ImageView field;                                        // Create imageview for the chess board
 
-    private TextView tmpField;                                      // Temporary version of game state
+    private ImageView field;                                        // Create imageview for the chess board
+    private TextView[][] fields = new TextView[8][8];               // Initialize textview array of the chess board
+
     private ArrayList<TextView> possibles = new ArrayList();        // ArrayList of possible moves
     private ArrayList<TextView> beatables = new ArrayList();        // ArrayList of beatable pieces
 
-    private TextView[][] fields = new TextView[8][8];               // Initialize textview array of the chess board
     private ArrayList<Pieces> bl_pieces = new ArrayList();          // ArrayList of black pieces
     private ArrayList<Pieces> w_pieces = new ArrayList();           // ArrayList of white pieces
     private ImageView[] imageViewsBl = new ImageView[8];            // ImageViews of the black chess pieces
     private ImageView[] imageViewsW = new ImageView[8];             // ImageViews of the white chess pieces
 
+    private int tmpPiece = 0;                                       // Remembers clicked piece until piece move is confirmed
+    private TextView tmpField;                                      // Temporary version of game state
+
     private TextView turnCounterW;                                  // Turn counter for white player
     private TextView turnCounterB;                                  // Turn counter for black player
 
-//    private int whiteMiliSec = 0;                                   // Millisecond counter for white player
-//    private int whiteSec = 60;                                      // Second counter for white player
-//    private int whiteMin = 14;                                      // Minute counter for white player
     private TextView timerW;                                        // Textview to show the white players timer
-
-//    private int blackMiliSec = 0;                                   // Millisecond counter for black player
-//    private int blackSec = 60;                                      // Second counter for black player
-//    private int blackMin = 14;                                      // Minute counter for black player
     private TextView timerB;                                        // Textview to show the black players timer
 
     private GameController GC;                                      // Initialize GameController
