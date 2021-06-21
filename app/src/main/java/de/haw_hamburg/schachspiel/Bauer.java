@@ -28,7 +28,6 @@ public class Bauer extends Pieces {
 
     //initialise the object with attributes
     public void initialise(ImageView img, int xPos, int yPos, int id){
-
         this.setImg(img);
         this.setxPosition(xPos);
         this.setyPosition(yPos);
@@ -38,39 +37,47 @@ public class Bauer extends Pieces {
     //first tries to create move()-method
     @Override
     void move() {
-//        if (p.getColor().equalsIgnoreCase("weiß")){
-//            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
-//                possibles.add(field[p.getxPosition()][p.getyPosition()+2]);
-//                //((Bauer) p).setFirstTurn(false);
-//            }
-//            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
-//                possibles.add(field[p.getxPosition()][p.getyPosition()+1]);
-//            }
-//            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1) && !takenByW){
-//                beatables.add(field[p.getxPosition()+1][p.getyPosition()+1]);
-//            }
-//            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1) && !takenByW){
-//                beatables.add(field[p.getxPosition()-1][p.getyPosition()+1]);
-//            }
-//        }
-//
-//        if (p.getColor().equalsIgnoreCase("schwarz")){
-//
-//
-//            if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1) && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
-//                possibles.add(field[p.getxPosition()][p.getyPosition()-2]);
-//                //((Bauer) p).setFirstTurn(false);
-//            }
-//            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
-//                possibles.add(field[p.getxPosition()][p.getyPosition()-1]);
-//            }
-//            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1) && !takenByBl){
-//                beatables.add(field[p.getxPosition()+1][p.getyPosition()-1]);
-//            }
-//            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1) && !takenByBl){
-//                beatables.add(field[p.getxPosition()-1][p.getyPosition()-1]);
-//            }
-//        }
+        /*       if (p.getColor().equalsIgnoreCase("weiß")){
+            if (((Bauer)p).isFirstTurn()
+                  && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)
+                  && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()+2)){//firstTurn ==true
+                possibles.add(field[p.getxPosition()][p.getyPosition()+2]);
+                //((Bauer) p).setFirstTurn(false);
+            }
+            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
+                possibles.add(field[p.getxPosition()][p.getyPosition()+1]);
+            }
+            if (p.getxPosition() <7
+                  && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1)
+                  && !takenByW){
+                beatables.add(field[p.getxPosition()+1][p.getyPosition()+1]);
+            }
+            if (p.getxPosition()>0
+                  && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1)
+                  && !takenByW){
+                beatables.add(field[p.getxPosition()-1][p.getyPosition()+1]);
+            }
+        }
+        if (p.getColor().equalsIgnoreCase("schwarz")){
+            if (((Bauer)p).isFirstTurn()
+                  && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)
+                  && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
+                possibles.add(field[p.getxPosition()][p.getyPosition()-2]);
+                //((Bauer) p).setFirstTurn(false);
+            }
+            if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
+                possibles.add(field[p.getxPosition()][p.getyPosition()-1]);
+            }
+            if (p.getxPosition() <7 && isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1)
+                  && !takenByBl){
+                beatables.add(field[p.getxPosition()+1][p.getyPosition()-1]);
+            }
+            if (p.getxPosition()>0 && isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1)
+                  && !takenByBl){
+                beatables.add(field[p.getxPosition()-1][p.getyPosition()-1]);
+            }
+        }
+        */
     }
 
     //planned attack()-method
@@ -78,8 +85,4 @@ public class Bauer extends Pieces {
     void attack() {
 
     }
-
-
-
-
 }

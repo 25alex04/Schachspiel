@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Gameover extends AppCompatActivity {
 
+    //key for intent to use class data
     private static final String DATA_KEY = "GameView.Data";
     private String data;
 
@@ -33,8 +34,6 @@ public class Gameover extends AppCompatActivity {
         Button menu = findViewById(R.id.whiteGameOverMenuButton);
         Button replay = findViewById(R.id.whiteGameOverReplayButton);
 
-
-
         //onClickListener for the menu-Button
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +51,5 @@ public class Gameover extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }

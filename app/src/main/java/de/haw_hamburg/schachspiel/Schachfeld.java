@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Schachfeld {
 
-    //ArrayList to create field
-    ArrayList<Feld> felder = new ArrayList();
+    //planned ArrayList to create field
+    private ArrayList<Feld> felder = new ArrayList();
 
     //method to initialise field
     public Schachfeld() {

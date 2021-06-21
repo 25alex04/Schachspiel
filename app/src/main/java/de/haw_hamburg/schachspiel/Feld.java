@@ -2,11 +2,11 @@ package de.haw_hamburg.schachspiel;
 
 public class Feld {
 
-    int yPos;              //y-Position of the field
-    int xPos;              //x-Position of the field
-    boolean taken = false; //boolean whether the field is taken
+    private int yPos;              //y-Position of the field
+    private int xPos;              //x-Position of the field
+    private boolean taken = false; //boolean whether the field is taken
 
-    //constructor for field
+    //planned constructor for field
     public Feld(int yPos, int xPos) {
         this.yPos = yPos;
         this.xPos = xPos;

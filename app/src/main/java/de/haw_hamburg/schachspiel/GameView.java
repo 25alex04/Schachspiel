@@ -17,7 +17,6 @@ import java.util.TimerTask;
 
 public class GameView extends AppCompatActivity implements View.OnClickListener {
 
-
     private static final String DATA_KEY = "GameView.Data";         // key to  access information in different intents
 
     private Button start;                                           // Button to start the chess game
@@ -136,7 +135,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initializeField() {
-
         //Assign chess squares to textviews
         fields[0][0] = (TextView) findViewById(R.id.A1);
         fields[0][1] = (TextView) findViewById(R.id.B1);
@@ -384,7 +382,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     }
     //Show possible moves for pieces
     private void showPossibles(Pieces p) {
-
         //Clear array of possible moves and beatable pieces before showing new possible moves and beatable pieces
         possibles.clear();
         beatables.clear();
@@ -943,9 +940,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void whiteTurn(boolean playerTurn) {
         if (playerTurn) {
-
             GC.refreshTimer(timerW,"white");
-
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -976,7 +971,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                     getPiece(tmpPiece).getImg().setX(getField(2, 0).getX());
                                     getPiece(tmpPiece).setxPosition(2);
                                 } else {
-
                                     getPiece(clickedXPosition, clickedYPosition).getImg().setX(getField(5, 0).getX());
                                     getPiece(clickedXPosition, clickedYPosition).setxPosition(5);
                                     getPiece(tmpPiece).getImg().setX(getField(6, 0).getX());
@@ -1038,9 +1032,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void blackTurn(boolean playerTurn) {
         if (playerTurn) {
-
             GC.refreshTimer(timerB,"black");
-
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -1072,7 +1064,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                     getPiece(tmpPiece).getImg().setX(getField(2, 0).getX());
                                     getPiece(tmpPiece).setxPosition(2);
                                 } else {
-
                                     getPiece(clickedXPosition, clickedYPosition).getImg().setX(getField(5, 0).getX());
                                     getPiece(clickedXPosition, clickedYPosition).setxPosition(5);
                                     getPiece(tmpPiece).getImg().setX(getField(6, 0).getX());
