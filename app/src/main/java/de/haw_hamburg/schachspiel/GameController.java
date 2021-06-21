@@ -92,10 +92,12 @@ public class GameController{
     }
 
     public TextView getField(int x, int y){
+
         return fields[y][x];
     }
 
     private void piecesOnStartposition(){
+
         int index = 0;
         for(int i = 0;i<2;i++){
             for (int j =0;j<8;j++){
@@ -119,6 +121,7 @@ public class GameController{
     }
 
     public boolean isClickedFieldTaken(int x, int y){
+
         for(int i=0;i<32;i++){
             if (getPiece(i).getxPosition()==x && getPiece(i).getyPosition()==y){
                 return true;
@@ -136,7 +139,7 @@ public class GameController{
             for(int j=0;j<8;j++){
                 if ((i%2==1&&j%2==1) || (i%2==0&&j%2==0)){
                     fields[i][j].setBackground(backgroundB);
-                } else {
+                }else {
                     fields[i][j].setBackground(backgroundW);
                 }
             }
@@ -144,9 +147,12 @@ public class GameController{
     }
 
     private void showPossibles(Pieces p){
+
         possibles.clear();
         beatables.clear();
+
         if (p instanceof Bauer){
+
 //            p.move();
             if (p.getColor().equalsIgnoreCase("weiß")){
                 if (((Bauer)p).isFirstTurn() && !isClickedFieldTaken(p.getxPosition(),
@@ -169,7 +175,10 @@ public class GameController{
                     beatables.add(getField(p.getxPosition()-1,p.getyPosition()+1));
                 }
             }
+
             if (p.getColor().equalsIgnoreCase("schwarz")){
+
+
                 if (((Bauer)p).isFirstTurn()
                         && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)
                         && !isClickedFieldTaken(p.getxPosition(),p.getyPosition()-2)){//firstTurn ==true
@@ -191,7 +200,9 @@ public class GameController{
                 }
             }
         }
+
         if(p instanceof Springer){
+
             //vorne rechts
             if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+2)
                     && p.getxPosition()+1<8
@@ -286,7 +297,9 @@ public class GameController{
                 beatables.add(getField(p.getxPosition()-2, p.getyPosition()-1));
             }
         }
+
         if(p instanceof Turm){
+
             //nach vorn
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7){
@@ -302,6 +315,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach unten
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0){
@@ -317,6 +331,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach rechts
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()+i <= 7){
@@ -332,6 +347,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach links
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()-i >=0){
@@ -348,7 +364,9 @@ public class GameController{
                 }
             }
         }
+
         if(p instanceof Läufer){
+
             //nach vorn-rechts
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
@@ -364,6 +382,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach unten rechts
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
@@ -379,6 +398,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach hinten links
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
@@ -394,23 +414,29 @@ public class GameController{
                     break;
                 }
             }
+
             //nach vorn-links
-            for(int i=1; i<=7; i++) {
-                if (p.getyPosition() + i <= 7 && p.getxPosition() - i >= 0) {
-                    if (!isClickedFieldTaken(p.getxPosition() - i, p.getyPosition() + i)) {
-                        possibles.add(getField(p.getxPosition() - i, p.getyPosition() + i));
-                    } else {
-                        if (!takenBy(p.getxPosition() - i, p.getyPosition() + i).equalsIgnoreCase(p.getColor())) {
-                            beatables.add(getField(p.getxPosition() - i, p.getyPosition() + i));
+            for(int i=1; i<=7; i++){
+                if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
+                    if (!isClickedFieldTaken(p.getxPosition()-i,p.getyPosition()+i)){
+                        possibles.add(getField(p.getxPosition()-i,p.getyPosition()+i));
+                    }else {
+                        if (!takenBy(p.getxPosition()-i,p.getyPosition()+i).equalsIgnoreCase(p.getColor())){
+                            beatables.add(getField(p.getxPosition()-i,p.getyPosition()+i));
                         }
                         break;
                     }
-                } else {
+                }else {
                     break;
                 }
             }
+
+
         }
+
         if(p instanceof Dame){
+
+
             //nach vorn
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7){
@@ -426,6 +452,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach unten
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0){
@@ -441,6 +468,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach rechts
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()+i <= 7){
@@ -456,6 +484,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach links
             for(int i=1; i<=7; i++){
                 if (p.getxPosition()-i >=0){
@@ -471,6 +500,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach vorn-rechts
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <= 7 && p.getxPosition()+i <= 7){
@@ -486,6 +516,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach unten rechts
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()+i <= 7){
@@ -501,6 +532,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach hinten links
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()-i >=0 && p.getxPosition()-i >= 0){
@@ -516,6 +548,7 @@ public class GameController{
                     break;
                 }
             }
+
             //nach vorn-links
             for(int i=1; i<=7; i++){
                 if (p.getyPosition()+i <=7 && p.getxPosition()-i >=0){
@@ -532,7 +565,9 @@ public class GameController{
                 }
             }
         }
+
         if (p instanceof König){
+
             //nach vorn
             if (p.getyPosition()+1<=7){
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()+1)){
@@ -543,6 +578,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach unten
             if (p.getyPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition(),p.getyPosition()-1)){
@@ -551,8 +587,10 @@ public class GameController{
                     if (!takenBy(p.getxPosition(),p.getyPosition()-1).equalsIgnoreCase(p.getColor())){
                         beatables.add(getField(p.getxPosition(),p.getyPosition()-1));
                     }
+
                 }
             }
+
             //nach rechts
             if (p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition())){
@@ -563,6 +601,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach links
             if (p.getxPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition())){
@@ -573,6 +612,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach vorn-rechts
             if (p.getyPosition()+1 <= 7 && p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()+1)){
@@ -583,6 +623,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach unten-rechts
             if (p.getyPosition()-1 >=0 && p.getxPosition()+1 <= 7){
                 if (!isClickedFieldTaken(p.getxPosition()+1,p.getyPosition()-1)){
@@ -593,6 +634,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach unten-links
             if (p.getyPosition()-1 >=0 && p.getxPosition()-1 >= 0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()-1)){
@@ -603,6 +645,7 @@ public class GameController{
                     }
                 }
             }
+
             //nach vorn-links
             if (p.getyPosition()+1 <=7 && p.getxPosition()-1 >=0){
                 if (!isClickedFieldTaken(p.getxPosition()-1,p.getyPosition()+1)){
@@ -613,6 +656,7 @@ public class GameController{
                     }
                 }
             }
+
             //Rochade
             if(p.getxPosition()==4
                     && p.getyPosition()==0
@@ -629,6 +673,7 @@ public class GameController{
                     }
                 }
             }
+
             if(p.getxPosition()==4
                     && p.getyPosition()==7
                     && p.getColor().equalsIgnoreCase("schwarz")){
@@ -645,6 +690,7 @@ public class GameController{
                 }
             }
         }
+
         for (TextView t: possibles){
             for (int i=0;i<8;i++){
                 for (int j=0;j<8;j++){
@@ -670,9 +716,11 @@ public class GameController{
             }
         }
     }
+
     void whiteTurn(boolean playerTurn, int whiteMiliSec, int whiteSec,
                    int whiteMin, boolean clickedPositionhasChanged,
-                   int clickedXPosition, int clickedYPosition, int turn) {
+                   int clickedXPosition, int clickedYPosition, int turn)
+    {
         if(playerTurn) {
             whiteMiliSec+=50;
             if (whiteMiliSec==1000){
@@ -695,6 +743,7 @@ public class GameController{
                     }catch (Exception e){}
                 }
             }
+
             if (clickedPositionhasChanged) {
                 if (turn % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -710,7 +759,8 @@ public class GameController{
                         clickedPositionhasChanged = false;
                         turn++;
                     }
-                } else {
+                }
+                else {
                     if (tmpPiece < 16) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
@@ -744,7 +794,8 @@ public class GameController{
                                 clickedPositionhasChanged = false;
                                 return;
                             }
-                        } else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
+                        }
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -762,7 +813,8 @@ public class GameController{
                             playerTurnDisplayB.setText("Your turn");
                             turnCounter++;
                             refreshTurnCounter();
-                        } else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
+                        }
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
@@ -786,9 +838,11 @@ public class GameController{
             }
         }
     }
+
     void blackTurn(boolean playerTurn, int blackMiliSec, int blackSec,
                    int blackMin, boolean clickedPositionhasChanged,
-                   int clickedXPosition, int clickedYPosition, int turn) {
+                   int clickedXPosition, int clickedYPosition, int turn)
+    {
         if(playerTurn) {
             blackMiliSec+=50;
             if (blackMiliSec==1000){
@@ -812,6 +866,7 @@ public class GameController{
                     }catch (Exception e){}
                 }
             }
+
             if (clickedPositionhasChanged) {
                 if (turn % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -823,11 +878,13 @@ public class GameController{
                             showPossibles(getPiece(tmpPiece));
                         }
                         clickedPositionhasChanged = false;
-                    } else {
+                    }
+                    else {
                         clickedPositionhasChanged = false;
                         turn++;
                     }
-                } else{
+                }
+                else{
                     if (tmpPiece > 15) {
                         tmpField = getField(clickedXPosition, clickedYPosition);
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
@@ -861,7 +918,8 @@ public class GameController{
                                 clickedPositionhasChanged = false;
                                 return;
                             }
-                        } else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
+                        }
+                        else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -879,7 +937,8 @@ public class GameController{
                             playerTurnDisplayB.setText("Not your turn");
                             turnCounter++;
                             refreshTurnCounter();
-                        } else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
+                        }
+                        else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
@@ -903,6 +962,7 @@ public class GameController{
             }
         }
     }
+
     public void refreshTurnCounter() {
         if (turnCounter %2 == 1) {
             turnCounterW.setText("Züge: " + ((turnCounter -1)/2 + 1));
@@ -910,4 +970,5 @@ public class GameController{
             turnCounterB.setText("Züge: " + (turnCounter /2));
         }
     }
+
 }
