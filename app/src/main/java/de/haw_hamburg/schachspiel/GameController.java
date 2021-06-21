@@ -33,7 +33,6 @@ public class GameController{
     Drawable red;
     Drawable green;
 
-
     private int whiteMiliSec = 0;                                   // Millisecond counter for white player
     private int whiteSec = 60;                                      // Second counter for white player
     private int whiteMin = 14;                                      // Minute counter for white player
@@ -43,7 +42,6 @@ public class GameController{
     private int blackMin = 14;                                      // Minute counter for black player
 
     private int turnCounter = 0;                                    // Counts the turn amount
-
 
     //turnCounter textviews refreshen
     public void refreshTurnCounter(TextView turnCounterW, TextView turnCounterB) {
@@ -59,7 +57,6 @@ public class GameController{
             turnCounterB.setText("Züge: " + (turnCounter / 2));
         }
     }
-
     //timer textviews get refreshed
     public void refreshTimer(TextView timer, String color){
 
@@ -76,7 +73,6 @@ public class GameController{
                     whiteMin--;
                     whiteSec = 60;
                 }
-
                 //setText for given timer
                 //different cases for textview text, therefore if, else if ,else
                 if (whiteSec != 60 && whiteSec > 9) {
@@ -100,7 +96,6 @@ public class GameController{
                 }
             }
         }
-
         //same procedure as before, just different variables
         if (color.equalsIgnoreCase("black")){
             blackMiliSec += 50;
@@ -130,15 +125,12 @@ public class GameController{
             }
         }
     }
-
     public int getWhiteMin() {
         return whiteMin;
     }
-
     public int getBlackMin() {
         return blackMin;
     }
-
     //start of outsourcing code
 
 //    public Pieces getPiece(int id){
@@ -1042,7 +1034,6 @@ public class GameController{
 //            }
 //        }
 //    }
-
 //    public void refreshTurnCounter() {
 //        if (turnCounter %2 == 1) {
 //            turnCounterW.setText("Züge: " + ((turnCounter -1)/2 + 1));
