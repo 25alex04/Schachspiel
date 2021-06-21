@@ -28,7 +28,6 @@ public class Bauer extends Pieces {
 
     //initialise the object with attributes
     public void initialise(ImageView img, int xPos, int yPos, int id){
-
         this.img = img;
         this.xPosition = xPos;
         this.yPosition = yPos;
@@ -78,8 +77,4 @@ public class Bauer extends Pieces {
     void attack() {
 
     }
-
-
-
-
 }

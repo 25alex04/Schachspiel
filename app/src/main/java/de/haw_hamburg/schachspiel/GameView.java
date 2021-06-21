@@ -63,7 +63,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gameview);
-
         field = findViewById(R.id.schachfeld);
 
         //Assign view to active player turn
@@ -109,7 +108,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 whiteTurn = true; // boolean that indicates it's whites turn
             }
         });
-
         //GC = new GameController(fields, w_pieces, bl_pieces, possibles, beatables, whiteTurn, blackTurn, gameOver, timerW, timerB, turnCounterW, turnCounterB, turnCounter,
         //        playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
         //        getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
@@ -339,7 +337,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 w_pieces.get(index).getImg().setX(fields[i][j].getX());
                 w_pieces.get(index).getImg().setY(fields[i][j].getY());
                 w_pieces.get(index).getImg().bringToFront();
-
                 index++;
             }
         }
@@ -374,7 +371,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         }
         return null;
     }
-
     //Get chess piece by coordinates
     public Pieces getPiece(int x, int y) {
         for (Pieces p : w_pieces) {
@@ -389,10 +385,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         }
         return null;
     }
-
     //Show possible moves for pieces
     private void showPossibles(Pieces p) {
-
         //Clear array of possible moves and beatable pieces before showing new possible moves and beatable pieces
         possibles.clear();
         beatables.clear();
@@ -444,7 +438,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-
         //Check possible moves and possible beatable pieces for knight
         if (p instanceof Springer) {
             //front right
@@ -530,7 +523,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 beatables.add(getField(p.getxPosition() - 2, p.getyPosition() - 1));
             }
         }
-
         //Check possible moves and possible beatable pieces for rook
         if (p instanceof Turm) {
             //front
@@ -594,7 +586,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-
         //Check possible moves and possible beatable pieces for bishop
         if (p instanceof Läufer) {
             //front right
@@ -658,7 +649,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-
         //Check possible moves and possible beatable pieces for queen
         if (p instanceof Dame) {
             //front
@@ -782,7 +772,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-
         //Check possible moves and possible beatable pieces for king
         if (p instanceof König) {
             //front
@@ -899,7 +888,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 }
             }
         }
-
         //Highlight possible moves green
         for (TextView t : possibles) {
             for (int i = 0; i < 8; i++) {
@@ -929,7 +917,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
-
     //Undo possible moves when clicking piece again
     private void undoPossibles() {
         for (int i = 0; i < 8; i++) {
@@ -942,7 +929,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
-
     //Check if chess square is taken by another piece
     public boolean isClickedFieldTaken(int x, int y) {
         for (int i = 0; i < 32; i++) {
@@ -952,7 +938,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         }
         return false;
     }
-
     //Get piece on a taken chess square
     public String takenBy(int x, int y) {
         return getPiece(x, y).getColor();
@@ -990,7 +975,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                     }
                 }
             }
-
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -1111,7 +1095,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                     }
                 }
             }
-
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -1205,7 +1188,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             }
         }
     }
-
     //Check game over conditions
     public void gameOverCondition() {
         //Check if any of the kings is beaten
@@ -1225,7 +1207,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 gameOver = true;
             }
         }
-
         //Check if any timer ran out
         if (whiteMin < 0) {
             Intent intent = new Intent(GameView.this, Gameover.class);
@@ -1240,7 +1221,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             gameOver = true;
         }
     }
-
     //Turn Counter
     public void refreshTurnCounter() {
         if (turnCounter % 2 == 1) {
@@ -1249,11 +1229,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             turnCounterB.setText("Züge: " + (turnCounter / 2));
         }
     }
-
     //Override onClick to change clickedPosition
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.A1:
                 setClickedXPosition(0);
@@ -1515,12 +1493,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         clickedCounter++;
         clickedPositionHasChanged = true;
     }
-
     //Set clicked position x axis
     public void setClickedXPosition(int clickedXPosition) {
         this.clickedXPosition = clickedXPosition;
     }
-
     //Set clicked position y axis
     public void setClickedYPosition(int clickedYPosition) {
         this.clickedYPosition = clickedYPosition;

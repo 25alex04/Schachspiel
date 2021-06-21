@@ -4,7 +4,7 @@ import android.widget.ImageView;
 
 public abstract class Pieces {
 
-    ImageView img;          //ImageView of the piece
+    ImageView img;          //Image of the piece
     boolean alive = true;   //boolean whether the piece is alive
     String color;
     int yPosition;
