@@ -4,12 +4,12 @@ import android.widget.ImageView;
 
 public abstract class Pieces {
 
-    ImageView img;          //ImageView of the piece
-    boolean alive = true;   //boolean whether the piece is alive
-    String color;
-    int yPosition;
-    int xPosition;
-    int id;
+    private ImageView img;          //ImageView of the piece
+    private boolean alive = true;   //boolean whether the piece is alive
+    private String color;           //string color to differentiate
+    private int yPosition;          //coordinates on board
+    private int xPosition;          //      -||-
+    private int id;                 //id to find piece in list
 
     //planned move()- and attack()-method
     abstract void move();
@@ -68,5 +68,10 @@ public abstract class Pieces {
     //getter for pieces id
     public int getId() {
         return id;
+    }
+
+    //setter for pieces id
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -7,11 +7,11 @@ public class Turm extends Pieces{
     //constructor for rook
     public Turm(ImageView img, String color, int xPos, int yPos, int id) {
         //super();
-        super.img = img;
-        super.color = color;
-        super.xPosition = xPos;
-        super.yPosition = yPos;
-        super.id = id;
+        this.setImg(img);
+        this.setColor(color);
+        this.setxPosition(xPos);
+        this.setyPosition(yPos);
+        this.setId(id);
     }
 
     //planned move()-attack

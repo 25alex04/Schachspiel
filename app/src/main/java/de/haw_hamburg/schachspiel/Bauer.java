@@ -23,16 +23,16 @@ public class Bauer extends Pieces {
 
     //constructor for pawn
     public Bauer(String color){
-        super.color = color;
+        super.setColor(color);
     }
 
     //initialise the object with attributes
     public void initialise(ImageView img, int xPos, int yPos, int id){
 
-        this.img = img;
-        this.xPosition = xPos;
-        this.yPosition = yPos;
-        this.id = id;
+        this.setImg(img);
+        this.setxPosition(xPos);
+        this.setyPosition(yPos);
+        this.setId(id);
     }
 
     //first tries to create move()-method
