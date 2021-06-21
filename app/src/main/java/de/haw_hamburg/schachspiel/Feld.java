@@ -1,6 +1,7 @@
 package de.haw_hamburg.schachspiel;
 
 public class Feld {
+
     int yPos;              //y-Position of the field
     int xPos;              //x-Position of the field
     boolean taken = false; //boolean whether the field is taken

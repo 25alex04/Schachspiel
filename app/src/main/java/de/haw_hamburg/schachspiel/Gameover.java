@@ -33,6 +33,8 @@ public class Gameover extends AppCompatActivity {
         Button menu = findViewById(R.id.whiteGameOverMenuButton);
         Button replay = findViewById(R.id.whiteGameOverReplayButton);
 
+
+
         //onClickListener for the menu-Button
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
