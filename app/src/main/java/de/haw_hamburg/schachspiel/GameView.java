@@ -108,13 +108,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 whiteTurn = true; // boolean that indicates it's whites turn
             }
         });
-<<<<<<< HEAD
-=======
 
         //GC = new GameController(fields, w_pieces, bl_pieces, possibles, beatables, whiteTurn, blackTurn, gameOver, timerW, timerB, turnCounterW, turnCounterB, turnCounter,
         //        playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
         //        getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
->>>>>>> parent of 9dd07fb (Conventions)
 
         // Create timertask that updates the game state and calls the turn functions every 10ms
 
@@ -960,39 +957,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void whiteTurn(boolean playerTurn) {
         if (playerTurn) {
-<<<<<<< HEAD
-            GC.refreshTimer(timerW,"white");
-=======
-            whiteMiliSec += 50;
-            if (whiteMiliSec == 1000) {
-                whiteSec--;
-                whiteMiliSec = 0;
-                if (whiteSec == 0) {
-                    whiteMin--;
-                    whiteSec = 60;
-                }
-                if (whiteSec != 60 && whiteSec > 9) {
-                    try {
-                        timerW.setText("Zeit:" + whiteMin + ":" + whiteSec);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else if (whiteSec < 10) {
-                    try {
-                        timerW.setText("Zeit:" + whiteMin + ":0" + whiteSec);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        timerW.setText("Zeit:" + (whiteMin + 1) + ":00");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
 
->>>>>>> parent of 9dd07fb (Conventions)
+            GC.refreshTimer(timerW,"white");
+
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
@@ -1085,36 +1052,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
     //ALEX KOMMENTIER MAL
     private void blackTurn(boolean playerTurn) {
         if (playerTurn) {
-<<<<<<< HEAD
 
             GC.refreshTimer(timerB,"black");
-=======
-            blackMiliSec += 50;
-            if (blackMiliSec == 1000) {
-                blackSec--;
-                blackMiliSec = 0;
-                if (blackSec == 0) {
-                    blackMin--;
-                    blackSec = 60;
-                }
-                if (blackSec != 60 && blackSec > 9) {
-                    try {
-                        timerB.setText("Zeit:" + blackMin + ":" + blackSec);
-                    } catch (Exception e) {
-                    }
-                } else if (blackSec < 10) {
-                    try {
-                        timerB.setText("Zeit:" + blackMin + ":0" + blackSec);
-                    } catch (Exception e) {
-                    }
-                } else {
-                    try {
-                        timerB.setText("Zeit:" + (blackMin + 1) + ":00");
-                    } catch (Exception e) {
-                    }
-                }
-            }
->>>>>>> parent of 9dd07fb (Conventions)
 
             if (clickedPositionHasChanged) {
                 if (clickedCounter % 2 == 1) {
@@ -1241,19 +1180,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             gameOver = true;
         }
     }
-<<<<<<< HEAD
-=======
 
-    //Turn Counter
-    public void refreshTurnCounter() {
-        if (turnCounter % 2 == 1) {
-            turnCounterW.setText("Züge: " + ((turnCounter - 1) / 2 + 1));
-        } else {
-            turnCounterB.setText("Züge: " + (turnCounter / 2));
-        }
-    }
-
->>>>>>> parent of 9dd07fb (Conventions)
     //Override onClick to change clickedPosition
     @Override
     public void onClick(View v) {
