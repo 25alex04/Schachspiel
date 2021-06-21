@@ -1,7 +1,6 @@
 package de.haw_hamburg.schachspiel;
 
 import org.junit.Test;
-import org.testng.annotations.AfterTest;
 
 import java.util.ArrayList;
 
