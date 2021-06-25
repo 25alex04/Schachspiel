@@ -937,30 +937,44 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         return getPiece(x, y).getColor();
     }
     //Check if it's whites turn
-    //ALEX KOMMENTIER MAL
     private void whiteTurn(boolean playerTurn) {
         if (playerTurn) {
+            //GameController counts and updates the timer textview
             GC.refreshTimer(timerW,"white");
+
+            //check for changed click position
             if (clickedPositionHasChanged) {
+                //Check for first click
                 if (clickedCounter % 2 == 1) {
+                    //Check if clicked on Piece
                     if (isClickedFieldTaken(clickedXPosition, clickedYPosition)) {
                         if (getPiece(clickedXPosition, clickedYPosition) != null) {
+                            //temporary Variable to know which Piece got clicked
                             tmpPiece = getPiece(clickedXPosition, clickedYPosition).getId();
+                            //ids over 15 are black pieces
                             if (tmpPiece > 15) {
                                 return;
                             }
+                            //highlight possible moves, beatables inclusive
                             showPossibles(getPiece(tmpPiece));
                         }
+                        //everything is done for the first click -> boolean set false
                         clickedPositionHasChanged = false;
                     } else {
+                        // if first click was not on a piece
                         clickedPositionHasChanged = false;
                         clickedCounter++;
                     }
                 } else {
+                    //this else block is for the second click while playerturn
+                    //tmpPiece under 16 to check if its a white Piece
                     if (tmpPiece < 16) {
+                        //temporary variable for the clicked field -> clarity Reasons
                         tmpField = getField(clickedXPosition, clickedYPosition);
+                        //check if second click is on a white Piece or an empty field
                         if (isClickedFieldTaken(clickedXPosition, clickedYPosition)
                                 && takenBy(clickedXPosition, clickedYPosition).equalsIgnoreCase("weiß")) {
+                            //check is Player might want to do castling
                             if (getPiece(tmpPiece) instanceof König
                                     && getPiece(clickedXPosition, clickedYPosition) != null
                                     && getPiece(clickedXPosition, clickedYPosition) instanceof Turm
@@ -976,6 +990,8 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                     getPiece(tmpPiece).getImg().setX(getField(6, 0).getX());
                                     getPiece(tmpPiece).setxPosition(6);
                                 }
+
+                                //set variables and textviews at the end of whites turn
                                 whiteTurn = false;
                                 blackTurn = true;
                                 playerTurnDisplayW.setText("Not your turn");
@@ -985,11 +1001,14 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                 clickedPositionHasChanged = false;
                                 return;
                             } else {
+                                //if castling is no option the highlighted fields return to normal colors
                                 undoPossibles();
                                 clickedPositionHasChanged = false;
                                 return;
                             }
+                        //when second click initializes to beat a black piece
                         } else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
+                            //set coordinates and stats for affected pieces
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
@@ -998,22 +1017,30 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
+                            //check if pawn got moved
                             if (getPiece(tmpPiece) instanceof Bauer) {
+                                //pawn firstmove is false so it cannot move two steps
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
+                            //set variables and textviews at the end of whites turn
                             whiteTurn = false;
                             blackTurn = true;
                             playerTurnDisplayW.setText("Not your turn");
                             playerTurnDisplayB.setText("Your turn");
                             GC.refreshTurnCounter(turnCounterW,turnCounterB);
+                        //when second click initializes to move a piece
                         } else if (possibles.contains(getField(clickedXPosition, clickedYPosition))) {
+                            //set coordinates and stats for affected pieces
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
                             getPiece(tmpPiece).getImg().setY(tmpField.getY());
+                            //check if pawn got moved
                             if (getPiece(tmpPiece) instanceof Bauer) {
+                                //pawn firstmove is false so it cannot move two steps
                                 ((Bauer) getPiece(tmpPiece)).setFirstTurn(false);
                             }
+                            //set variables and textviews at the end of whites turn
                             whiteTurn = false;
                             blackTurn = true;
                             playerTurnDisplayW.setText("Not your turn");
@@ -1021,15 +1048,17 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                             GC.refreshTurnCounter(turnCounterW,turnCounterB);
                         }
                     } else {
+                        //should not happen
                         return;
                     }
+                    //when the turn ended the highlighted fields return to normal colors
                     undoPossibles();
                     clickedPositionHasChanged = false;
                 }
             }
         }
     }
-    //ALEX KOMMENTIER MAL
+    //same procedure as whiteTurn
     private void blackTurn(boolean playerTurn) {
         if (playerTurn) {
             GC.refreshTimer(timerB,"black");
