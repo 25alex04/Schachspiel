@@ -66,6 +66,9 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         //Assign view to active player turn
         playerTurnDisplayW = findViewById(R.id.zugBestätigenButton);
         playerTurnDisplayB = findViewById(R.id.zugBestätigenButton180);
+        //Set text for starting player
+        playerTurnDisplayW.setText(" !Weiß startet! "); //
+        playerTurnDisplayB.setText(" !Weiß startet! "); //
 
         //Assign view to startGame button
         start = findViewById(R.id.startGame);
@@ -100,9 +103,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                 piecesOnStartposition(); //Set pieces on their starting position
                 start.setVisibility(View.INVISIBLE); //Set start button to invisible
 
-                //Set text for starting player
-                playerTurnDisplayW.setText(" !Weiß startet! "); //
-                playerTurnDisplayB.setText(" !Weiß startet! "); //
                 whiteTurn = true; // boolean that indicates it's whites turn
             }
         });
@@ -111,8 +111,7 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         //        playerTurnDisplayW, playerTurnDisplayB, getResources().getDrawable(R.drawable.weiss), getResources().getDrawable(R.drawable.schwarz),
         //        getResources().getDrawable(R.drawable.red), getResources().getDrawable(R.drawable.green));
 
-        // Create timertask that updates the game state and calls the turn functions every 10ms
-
+        // Create timertask that updates the game state and calls the turn functions every 50ms
         GC = new GameController();
         Timer timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -200,6 +199,13 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
         fields[7][5] = (TextView) findViewById(R.id.F8);
         fields[7][6] = (TextView) findViewById(R.id.G8);
         fields[7][7] = (TextView) findViewById(R.id.H8);
+
+        //Assign onClickListener to every chess square
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                fields[i][j].setOnClickListener(this::onClick);
+            }
+        }
 
         //Assign variables to imageviews
         ImageView bl_bauer1 = findViewById(R.id.bl_bauer1);
@@ -317,12 +323,6 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
             Bauer bauer = new Bauer("weiß");
             bauer.initialise(imageViewsW[i], 0 + i, 1, 0 + i);
             w_pieces.add(bauer);
-        }
-        //Assign onClickListener to every chess square
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                fields[i][j].setOnClickListener(this::onClick);
-            }
         }
     }
     //Set starting position for every piece
@@ -1112,10 +1112,10 @@ public class GameView extends AppCompatActivity implements View.OnClickListener 
                                 return;
                             }
                         } else if (beatables.contains(getField(clickedXPosition, clickedYPosition))) {
+                            getPiece(clickedXPosition, clickedYPosition).setAlive(false);
                             getPiece(clickedXPosition, clickedYPosition).getImg().setVisibility(View.INVISIBLE);
                             getPiece(clickedXPosition, clickedYPosition).setxPosition(10);
                             getPiece(10, clickedYPosition).setyPosition(10);
-                            getPiece(10, 10).setAlive(false);
                             getPiece(tmpPiece).setxPosition(clickedXPosition);
                             getPiece(tmpPiece).setyPosition(clickedYPosition);
                             getPiece(tmpPiece).getImg().setX(tmpField.getX());
